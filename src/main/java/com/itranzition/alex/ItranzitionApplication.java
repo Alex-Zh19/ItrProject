@@ -2,6 +2,8 @@ package com.itranzition.alex;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class ItranzitionApplication {
@@ -10,4 +12,9 @@ public class ItranzitionApplication {
 		SpringApplication.run(ItranzitionApplication.class, args);
 	}
 
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		return bCryptPasswordEncoder;
+	}
 }
