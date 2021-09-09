@@ -24,7 +24,6 @@ public class User {
     @Column
     private String surname;
 
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -35,7 +34,6 @@ public class User {
 
     public User() {
     }
-
 
     public User(Long id, String email, String name, String password) {
         this.id = id;

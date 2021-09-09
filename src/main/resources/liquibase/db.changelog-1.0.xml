@@ -42,5 +42,4 @@
             <column name="role" value="USER" />
         </insert>
     </changeSet>
-
 </databaseChangeLog>

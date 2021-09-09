@@ -15,6 +15,5 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getOutputStream().println("{ Error 401 : \"" + authenticationException.getMessage() + "\" }");
-
     }
 }

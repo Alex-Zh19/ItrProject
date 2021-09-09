@@ -30,11 +30,9 @@ public class TokenProvider {
 
     private UserDetailsService userDetailsService;
 
-
     public TokenProvider(JwtUserDetailsService jwtUserDetailsService) {
         this.userDetailsService = jwtUserDetailsService;
     }
-
 
     @PostConstruct
     protected void init() {
