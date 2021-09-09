@@ -1,4 +1,4 @@
-package com.itranzition.alex.model.repository;
+package com.itranzition.alex.repository;
 
 import com.itranzition.alex.model.entity.User;
 import org.springframework.data.repository.CrudRepository;

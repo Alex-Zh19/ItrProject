@@ -1,8 +1,8 @@
 package com.itranzition.alex.controller;
 
 import com.itranzition.alex.model.entity.User;
-import com.itranzition.alex.model.security.jwt.TokenProvider;
-import com.itranzition.alex.model.service.UserService;
+import com.itranzition.alex.security.jwt.TokenProvider;
+import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

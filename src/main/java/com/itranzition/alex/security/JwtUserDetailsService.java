@@ -1,9 +1,9 @@
-package com.itranzition.alex.model.security;
+package com.itranzition.alex.security;
 
 import com.itranzition.alex.model.entity.User;
-import com.itranzition.alex.model.security.jwt.JwtUser;
-import com.itranzition.alex.model.security.jwt.JwtUserFactory;
-import com.itranzition.alex.model.service.UserService;
+import com.itranzition.alex.security.jwt.JwtUser;
+import com.itranzition.alex.security.jwt.JwtUserFactory;
+import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,8 +1,8 @@
-package com.itranzition.alex.model.security.jwt;
+package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.exception.JwtAuthenticationException;
 import com.itranzition.alex.model.entity.User;
-import com.itranzition.alex.model.security.JwtUserDetailsService;
+import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -44,8 +44,12 @@ public class TokenProvider {
         claims.put("role", role);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityMilliseconds * 1000);
-        return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(validity).
-                signWith(SignatureAlgorithm.HS256, keyword).compact();
+        return Jwts.builder().
+                setClaims(claims).
+                setIssuedAt(now).
+                setExpiration(validity).
+                signWith(SignatureAlgorithm.HS256, keyword).
+                compact();
     }
 
     public String resolveToken(HttpServletRequest request) {
@@ -63,7 +67,6 @@ public class TokenProvider {
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("Jwt token is expired or invalid", HttpStatus.UNAUTHORIZED);
         }
-
     }
 
     public Authentication getAuthentication(String token) {
@@ -72,7 +75,11 @@ public class TokenProvider {
     }
 
     public String getUserEmail(String token) {
-        return Jwts.parser().setSigningKey(keyword).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().
+                setSigningKey(keyword).
+                parseClaimsJws(token).
+                getBody().
+                getSubject();
     }
 
 }

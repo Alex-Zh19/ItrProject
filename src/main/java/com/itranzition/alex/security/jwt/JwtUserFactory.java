@@ -1,4 +1,4 @@
-package com.itranzition.alex.model.security.jwt;
+package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,8 @@ public final class JwtUserFactory {
                 user.getPassword(), user.getRole(),mapToGrantedAuthority(userRoleList));
     }
     private static List<GrantedAuthority> mapToGrantedAuthority(List<User.Role> userRoles){
-        return userRoles.stream().map(role -> new SimpleGrantedAuthority(role.name())).
+        return userRoles.stream().
+                map(role -> new SimpleGrantedAuthority(role.name())).
                 collect(Collectors.toList());
     }
 }

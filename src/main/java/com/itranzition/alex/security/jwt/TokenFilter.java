@@ -1,4 +1,4 @@
-package com.itranzition.alex.model.security.jwt;
+package com.itranzition.alex.security.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

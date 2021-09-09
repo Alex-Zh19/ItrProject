@@ -1,4 +1,4 @@
-package com.itranzition.alex.model.security.jwt;
+package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;

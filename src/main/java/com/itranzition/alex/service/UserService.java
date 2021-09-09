@@ -1,4 +1,4 @@
-package com.itranzition.alex.model.service;
+package com.itranzition.alex.service;
 
 import com.itranzition.alex.model.entity.User;
 

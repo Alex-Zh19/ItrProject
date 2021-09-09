@@ -3,8 +3,8 @@ package com.itranzition.alex.controller;
 import com.itranzition.alex.model.dto.AuthenticationDto;
 import com.itranzition.alex.model.dto.SignUpDto;
 import com.itranzition.alex.model.entity.User;
-import com.itranzition.alex.model.security.jwt.TokenProvider;
-import com.itranzition.alex.model.service.UserService;
+import com.itranzition.alex.security.jwt.TokenProvider;
+import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +73,6 @@ public class AuthenticationController {
         }
         if (!signUpDto.getPassword().equals(signUpDto.getConfirmPassword())) {
             throw new BadCredentialsException("User password and confirm password do not march");
-
         }
         User userRegistered = userService.addUser(user);
         Map<Object, Object> response = new HashMap<>();
