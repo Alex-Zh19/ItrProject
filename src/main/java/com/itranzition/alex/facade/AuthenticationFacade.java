@@ -1,5 +1,6 @@
 package com.itranzition.alex.facade;
 
+import com.itranzition.alex.mapper.UserMapper;
 import com.itranzition.alex.model.dto.AuthenticationDto;
 import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.model.dto.SignUpDto;
@@ -11,7 +12,6 @@ import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,8 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class AuthenticationFacade {
@@ -36,10 +34,10 @@ public class AuthenticationFacade {
         this.userService = userService;
     }
 
-    public BaseResponseDto signIn(AuthenticationDto authenticationDTO){
+    public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
         if (authenticationDTO.getEmail() == null || authenticationDTO.getPassword() == null) {
-            ResponseErrorDto responseErrorDto=new ResponseErrorDto();
-            responseErrorDto.setMessage(HttpStatus.BAD_REQUEST.value()+" "+HttpStatus.BAD_REQUEST.getReasonPhrase());
+            ResponseErrorDto responseErrorDto = new ResponseErrorDto();
+            responseErrorDto.setMessage(HttpStatus.BAD_REQUEST.value() + " " + HttpStatus.BAD_REQUEST.getReasonPhrase());
             return responseErrorDto;
         }
         try {
@@ -51,7 +49,7 @@ public class AuthenticationFacade {
                 throw new UsernameNotFoundException(String.format("User with email %s not found", email));
             }
             String token = tokenProvider.createToken(email, user.getRole());
-            ResponseSignInDto responseSignInDto=new ResponseSignInDto();
+            ResponseSignInDto responseSignInDto = new ResponseSignInDto();
             responseSignInDto.setToken(token);
             responseSignInDto.setEmail(email);
             return responseSignInDto;
@@ -60,17 +58,18 @@ public class AuthenticationFacade {
         }
     }
 
-    public BaseResponseDto signUp(SignUpDto signUpDto){
+    public BaseResponseDto signUp(SignUpDto signUpDto) {
         if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
                 signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
-            ResponseErrorDto responseErrorDto=new ResponseErrorDto();
+            ResponseErrorDto responseErrorDto = new ResponseErrorDto();
             responseErrorDto.setMessage("Error 400 : \"Fill in required fields\"");
             return responseErrorDto;
         }
-        User user = new User();
+        /*User user = new User();
         user.setEmail(signUpDto.getEmail());
         user.setName(signUpDto.getName());
-        user.setPassword(signUpDto.getPassword());
+        user.setPassword(signUpDto.getPassword());*/
+        User user = UserMapper.USER_MAPPER.signUpDtoToUser(signUpDto);
         if (signUpDto.getSurname() != null) {
             user.setSurname(signUpDto.getSurname());
         }
@@ -78,7 +77,7 @@ public class AuthenticationFacade {
             throw new BadCredentialsException("User password and confirm password do not march");
         }
         User userRegistered = userService.addUser(user);
-        ResponseSignUpDto responseSignUpDto=new ResponseSignUpDto();
+        ResponseSignUpDto responseSignUpDto = new ResponseSignUpDto();
         responseSignUpDto.setName(signUpDto.getName());
         responseSignUpDto.setEmail(signUpDto.getEmail());
         return responseSignUpDto;
