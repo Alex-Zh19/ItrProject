@@ -27,19 +27,7 @@
     </changeSet>
 
     <changeSet id="2" author="Alex">
-        <insert tableName="users">
-            <column name="email" value="bill@mail.ru"/>
-            <column name="name" value="bill" />
-            <column name="password" value="$2a$10$S8Xhug338ilO0PcJRGTiV.ZRv8OXObxC3clxtb8Fdn47fd0YZcHVi" />
-            <column name="surname" value="NULL" />
-            <column name="role" value="USER" />
-        </insert>
-        <insert tableName="users">
-            <column name="email" value="john@mail.ru"/>
-            <column name="name" value="john" />
-            <column name="password" value="$2a$10$m/f2u1L5HzM7j0Xfib.3ZuHXIFSJ6uOIKgkDBn4vxCnNNBiQHZkfK" />
-            <column name="surname" value="doe" />
-            <column name="role" value="USER" />
-        </insert>
+        <loadData tableName="users" file="user_data.csv"/>
     </changeSet>
+
 </databaseChangeLog>
