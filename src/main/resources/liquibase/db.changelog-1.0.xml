@@ -1,0 +1,45 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1" author="Alex">
+        <sql>CREATE TYPE role_enum AS ENUM ('USER','GUEST')</sql>
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(45)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="name"  type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password"  type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname"  type="varchar(45)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="role" type="role_enum">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Alex">
+        <insert tableName="users">
+            <column name="email" value="bill@mail.ru"/>
+            <column name="name" value="bill" />
+            <column name="password" value="$2a$10$S8Xhug338ilO0PcJRGTiV.ZRv8OXObxC3clxtb8Fdn47fd0YZcHVi" />
+            <column name="surname" value="NULL" />
+            <column name="role" value="USER" />
+        </insert>
+        <insert tableName="users">
+            <column name="email" value="john@mail.ru"/>
+            <column name="name" value="john" />
+            <column name="password" value="$2a$10$m/f2u1L5HzM7j0Xfib.3ZuHXIFSJ6uOIKgkDBn4vxCnNNBiQHZkfK" />
+            <column name="surname" value="doe" />
+            <column name="role" value="USER" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>
