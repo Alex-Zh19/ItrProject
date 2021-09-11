@@ -25,7 +25,7 @@ public class UserFacade {
         this.userService = userService;
     }
 
-    public BaseResponseDto hello(HttpServletRequest request){
+    public ResponseEntity hello(HttpServletRequest request){
         String token = tokenProvider.resolveToken(request);
         ResponseHelloDto responseHelloDto=new ResponseHelloDto();
         if (token != null) {
@@ -36,6 +36,6 @@ public class UserFacade {
             }
             responseHelloDto.setName(user.getName());
         }
-        return responseHelloDto;
+        return ResponseEntity.ok(responseHelloDto.getDEFAULT_MESSAGE()+responseHelloDto.getName());
     }
 }
