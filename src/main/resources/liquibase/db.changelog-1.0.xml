@@ -28,5 +28,4 @@
     <changeSet id="2" author="Alex">
         <loadData tableName="users" file="liquibase/user_data.csv" />
     </changeSet>
-
 </databaseChangeLog>

@@ -8,4 +8,3 @@ public class ResponseSignInDto implements BaseResponseDto {
     private String email;
     private String token;
 }
-

@@ -1,8 +1,8 @@
 package com.itranzition.alex.service.impl;
 
+import com.itranzition.alex.service.UserService;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.repository.UserRepository;
-import com.itranzition.alex.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,5 +43,4 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
-
 }

@@ -1,7 +1,6 @@
 package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.exception.JwtAuthenticationException;
-import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,5 +80,4 @@ public class TokenProvider {
                 getBody().
                 getSubject();
     }
-
 }

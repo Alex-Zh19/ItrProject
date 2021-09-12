@@ -19,7 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class AuthenticationFacade {
 
@@ -65,10 +64,6 @@ public class AuthenticationFacade {
             responseErrorDto.setMessage("Error 400 : \"Fill in required fields\"");
             return responseErrorDto;
         }
-        /*User user = new User();
-        user.setEmail(signUpDto.getEmail());
-        user.setName(signUpDto.getName());
-        user.setPassword(signUpDto.getPassword());*/
         User user = UserMapper.USER_MAPPER.signUpDtoToUser(signUpDto);
         if (signUpDto.getSurname() != null) {
             user.setSurname(signUpDto.getSurname());
@@ -82,5 +77,4 @@ public class AuthenticationFacade {
         responseSignUpDto.setEmail(signUpDto.getEmail());
         return responseSignUpDto;
     }
-
 }

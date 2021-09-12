@@ -1,7 +1,5 @@
 package com.itranzition.alex.facade;
 
-
-import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;

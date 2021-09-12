@@ -1,6 +1,5 @@
 package com.itranzition.alex.config;
 
-import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.JwtConfigurer;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
