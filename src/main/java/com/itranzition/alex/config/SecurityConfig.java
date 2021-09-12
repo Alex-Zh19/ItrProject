@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers(SIGN_IN_ENDPOINT).permitAll()
                 .antMatchers(SIGN_UP_ENDPOINT).permitAll()
-                .antMatchers(USER_ENDPOINT).hasRole(User.Role.USER.name())
+                .antMatchers(USER_ENDPOINT).hasRole("USER")
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())

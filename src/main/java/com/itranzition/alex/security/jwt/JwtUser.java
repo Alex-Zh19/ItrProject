@@ -11,10 +11,10 @@ public class JwtUser implements UserDetails {
     private final String email;
     private final String name;
     private final String password;
-    private final User.Role role;
+    private final String role;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(Long id, String email, String name, String password, User.Role role,
+    public JwtUser(Long id, String email, String name, String password, String role,
                    Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;

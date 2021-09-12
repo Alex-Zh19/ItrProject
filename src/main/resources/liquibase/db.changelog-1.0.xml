@@ -3,7 +3,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="Alex">
-        <sql>CREATE TYPE role_enum AS ENUM ('USER','GUEST')</sql>
         <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -20,7 +19,7 @@
             <column name="surname"  type="varchar(45)">
                 <constraints nullable="true"/>
             </column>
-            <column name="role" type="role_enum">
+            <column name="role" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

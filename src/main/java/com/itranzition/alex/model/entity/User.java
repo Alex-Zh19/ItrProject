@@ -30,13 +30,8 @@ public class User {
     @Column
     private String surname;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    public enum Role {
-        USER,
-        GUEST
-    }
+    @Column(nullable = false)
+    private String role;
 
     public User(Long id, String email, String name, String password) {
         this.id = id;
@@ -45,7 +40,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String email, String name, String password, String surname, Role role) {
+    public User(String email, String name, String password, String surname, String role) {
         this.email = email;
         this.name = name;
         this.password = password;

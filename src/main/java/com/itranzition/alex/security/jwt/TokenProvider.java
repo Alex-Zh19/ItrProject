@@ -39,7 +39,7 @@ public class TokenProvider {
         keyword = Base64.getEncoder().encodeToString(keyword.getBytes());
     }
 
-    public String createToken(String email, User.Role role) {
+    public String createToken(String email, String role) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
         Date now = new Date();

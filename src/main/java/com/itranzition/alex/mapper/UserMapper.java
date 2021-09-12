@@ -12,9 +12,9 @@ public interface UserMapper {
 
     UserMapper USER_MAPPER= Mappers.getMapper(UserMapper.class);
 
-    @Mappings({@Mapping(target = "email", source = "signUpDto.email"),
-            @Mapping(target = "name", source = "signUpDto.name"),
-            @Mapping(target = "password", source = "signUpDto.password"),
-            @Mapping(target = "surname", source = "signUpDto.surname", defaultValue = "NULL")})
+   @Mappings({@Mapping(target = "email", source = "email"),
+            @Mapping(target = "name", source = "name"),
+            @Mapping(target = "password", source = "password"),
+            @Mapping(target = "surname", source = "surname", defaultValue = "NULL")})
     User signUpDtoToUser (SignUpDto signUpDto);
 }
