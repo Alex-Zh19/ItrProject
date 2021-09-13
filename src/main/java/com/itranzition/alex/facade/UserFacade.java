@@ -1,11 +1,11 @@
 package com.itranzition.alex.facade;
 
+import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,7 @@ public class UserFacade {
 
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final String DEFAULT_MESSAGE = "hello";
 
     @Autowired
     public UserFacade(TokenProvider tokenProvider, UserService userService) {
@@ -23,17 +24,21 @@ public class UserFacade {
         this.userService = userService;
     }
 
-    public ResponseEntity hello(HttpServletRequest request){
+    public BaseResponseDto hello(HttpServletRequest request) {
         String token = tokenProvider.resolveToken(request);
-        ResponseHelloDto responseHelloDto=new ResponseHelloDto();
-        if (token != null) {
-            String email = tokenProvider.getUserEmail(token);
-            User user = userService.findUserByEmail(email);
-            if (user == null) {
-                throw new UsernameNotFoundException(String.format("User with email %s not found", email));
-            }
-            responseHelloDto.setName(user.getName());
+        String email = tokenProvider.getUserEmail(token);
+        User user = userService.findUserByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User with email %s not found", email));
         }
-        return ResponseEntity.ok(responseHelloDto.getDEFAULT_MESSAGE()+responseHelloDto.getName());
+        return createHelloResponse(user);
+    }
+
+    private BaseResponseDto createHelloResponse(User user) {
+        ResponseHelloDto responseHelloDto = new ResponseHelloDto();
+        StringBuilder responseMessageBuilder = new StringBuilder(DEFAULT_MESSAGE).
+                append(user.getName());
+        responseHelloDto.setMessage(responseMessageBuilder.toString());
+        return responseHelloDto;
     }
 }

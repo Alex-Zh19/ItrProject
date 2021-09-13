@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class ResponseHelloDto implements BaseResponseDto {
-    private final String DEFAULT_MESSAGE="hello ";
-    private String name;
+    private String message;
 }
