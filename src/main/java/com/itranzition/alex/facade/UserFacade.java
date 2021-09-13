@@ -5,7 +5,6 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +15,7 @@ public class UserFacade {
 
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final String DEFAULT_MESSAGE="hello";
 
     @Autowired
     public UserFacade(TokenProvider tokenProvider, UserService userService) {
@@ -23,7 +23,7 @@ public class UserFacade {
         this.userService = userService;
     }
 
-    public ResponseEntity hello(HttpServletRequest request){
+    public ResponseHelloDto hello(HttpServletRequest request){
         String token = tokenProvider.resolveToken(request);
         ResponseHelloDto responseHelloDto=new ResponseHelloDto();
         if (token != null) {
@@ -32,8 +32,9 @@ public class UserFacade {
             if (user == null) {
                 throw new UsernameNotFoundException(String.format("User with email %s not found", email));
             }
-            responseHelloDto.setName(user.getName());
+            responseHelloDto.getMessage().
+                    append(DEFAULT_MESSAGE).append(" ").append(user.getName());
         }
-        return ResponseEntity.ok(responseHelloDto.getDEFAULT_MESSAGE()+responseHelloDto.getName());
+        return responseHelloDto;
     }
 }

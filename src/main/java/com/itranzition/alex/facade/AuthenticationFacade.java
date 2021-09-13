@@ -25,12 +25,16 @@ public class AuthenticationFacade {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Autowired
-    public AuthenticationFacade(AuthenticationManager authenticationManager, TokenProvider tokenProvider, UserService userService) {
+    public AuthenticationFacade(AuthenticationManager authenticationManager,
+                                TokenProvider tokenProvider, UserService userService,
+                                UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
@@ -58,23 +62,18 @@ public class AuthenticationFacade {
     }
 
     public BaseResponseDto signUp(SignUpDto signUpDto) {
+        if (!signUpDto.getPassword().equals(signUpDto.getConfirmPassword())) {
+            throw new BadCredentialsException("User password and confirm password do not march");
+        }
         if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
                 signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
             ResponseErrorDto responseErrorDto = new ResponseErrorDto();
             responseErrorDto.setMessage("Error 400 : \"Fill in required fields\"");
             return responseErrorDto;
         }
-        User user = UserMapper.USER_MAPPER.signUpDtoToUser(signUpDto);
-        if (signUpDto.getSurname() != null) {
-            user.setSurname(signUpDto.getSurname());
-        }
-        if (!signUpDto.getPassword().equals(signUpDto.getConfirmPassword())) {
-            throw new BadCredentialsException("User password and confirm password do not march");
-        }
+        User user = userMapper.signUpDtoToUser(signUpDto);
         User userRegistered = userService.addUser(user);
-        ResponseSignUpDto responseSignUpDto = new ResponseSignUpDto();
-        responseSignUpDto.setName(signUpDto.getName());
-        responseSignUpDto.setEmail(signUpDto.getEmail());
+        ResponseSignUpDto responseSignUpDto = userMapper.signUpDtoToResponseSignUpDto(signUpDto);
         return responseSignUpDto;
     }
 }
