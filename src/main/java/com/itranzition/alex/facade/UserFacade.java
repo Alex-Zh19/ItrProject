@@ -1,5 +1,6 @@
 package com.itranzition.alex.facade;
 
+import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
@@ -15,7 +16,7 @@ public class UserFacade {
 
     private final TokenProvider tokenProvider;
     private final UserService userService;
-    private final String DEFAULT_MESSAGE="hello";
+    private final String DEFAULT_MESSAGE = "hello";
 
     @Autowired
     public UserFacade(TokenProvider tokenProvider, UserService userService) {
@@ -23,18 +24,24 @@ public class UserFacade {
         this.userService = userService;
     }
 
-    public ResponseHelloDto hello(HttpServletRequest request){
+    public BaseResponseDto hello(HttpServletRequest request) {
         String token = tokenProvider.resolveToken(request);
-        ResponseHelloDto responseHelloDto=new ResponseHelloDto();
+        User user = null;
         if (token != null) {
             String email = tokenProvider.getUserEmail(token);
-            User user = userService.findUserByEmail(email);
+            user = userService.findUserByEmail(email);
             if (user == null) {
                 throw new UsernameNotFoundException(String.format("User with email %s not found", email));
             }
-            responseHelloDto.getMessage().
-                    append(DEFAULT_MESSAGE).append(" ").append(user.getName());
         }
+        return createHelloResponse(user);
+    }
+
+    private BaseResponseDto createHelloResponse(User user) {
+        ResponseHelloDto responseHelloDto = new ResponseHelloDto();
+        StringBuilder responseMessageBuilder = new StringBuilder(DEFAULT_MESSAGE).
+                append(user.getName());
+        responseHelloDto.setMessage(responseMessageBuilder.toString());
         return responseHelloDto;
     }
 }

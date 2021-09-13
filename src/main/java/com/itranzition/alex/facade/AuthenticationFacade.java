@@ -39,23 +39,17 @@ public class AuthenticationFacade {
 
     public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
         if (authenticationDTO.getEmail() == null || authenticationDTO.getPassword() == null) {
-            ResponseErrorDto responseErrorDto = new ResponseErrorDto();
-            responseErrorDto.setMessage(HttpStatus.BAD_REQUEST.value() + " " + HttpStatus.BAD_REQUEST.getReasonPhrase());
-            return responseErrorDto;
+            StringBuilder errorMessage = new StringBuilder(HttpStatus.BAD_REQUEST.value()).
+                    append(" ").
+                    append(HttpStatus.BAD_REQUEST.getReasonPhrase());
+            return createErrorResponse(errorMessage.toString());
         }
         try {
-            String email = authenticationDTO.getEmail();
-            String password = authenticationDTO.getPassword();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-            User user = userService.findUserByEmail(email);
+            User user = findUser(authenticationDTO);
             if (user == null) {
-                throw new UsernameNotFoundException(String.format("User with email %s not found", email));
+                throw new UsernameNotFoundException(String.format("User with email %s not found", user.getEmail()));
             }
-            String token = tokenProvider.createToken(email, user.getRole());
-            ResponseSignInDto responseSignInDto = new ResponseSignInDto();
-            responseSignInDto.setToken(token);
-            responseSignInDto.setEmail(email);
-            return responseSignInDto;
+            return createSignInResponse(user);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password");
         }
@@ -67,13 +61,34 @@ public class AuthenticationFacade {
         }
         if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
                 signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
-            ResponseErrorDto responseErrorDto = new ResponseErrorDto();
-            responseErrorDto.setMessage("Error 400 : \"Fill in required fields\"");
-            return responseErrorDto;
+            String errorMessage = "Error 400 : \"Fill in required fields\"";
+            return createErrorResponse(errorMessage);
         }
         User user = userMapper.signUpDtoToUser(signUpDto);
         User userRegistered = userService.addUser(user);
         ResponseSignUpDto responseSignUpDto = userMapper.signUpDtoToResponseSignUpDto(signUpDto);
         return responseSignUpDto;
+    }
+
+    private User findUser(AuthenticationDto authenticationDto) {
+        String email = authenticationDto.getEmail();
+        String password = authenticationDto.getPassword();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        return userService.findUserByEmail(email);
+    }
+
+    private BaseResponseDto createSignInResponse(User user) {
+        String email = user.getEmail();
+        String token = tokenProvider.createToken(email, user.getRole());
+        ResponseSignInDto responseSignInDto = new ResponseSignInDto();
+        responseSignInDto.setToken(token);
+        responseSignInDto.setEmail(email);
+        return responseSignInDto;
+    }
+
+    private BaseResponseDto createErrorResponse(String message) {
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto();
+        responseErrorDto.setMessage(message);
+        return responseErrorDto;
     }
 }

@@ -13,13 +13,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenProvider tokenProvider;
-    private static final String USER_ENDPOINT="/api/user/";
-    private static final String SIGN_IN_ENDPOINT="/api/auth/signin";
-    private static final String SIGN_UP_ENDPOINT="/api/auth/signup";
+    private static final String USER_ENDPOINT = "/api/user/";
+    private static final String SIGN_IN_ENDPOINT = "/api/auth/signin";
+    private static final String SIGN_UP_ENDPOINT = "/api/auth/signup";
 
     @Autowired
-    public SecurityConfig (TokenProvider tokenProvider){
-        this.tokenProvider=tokenProvider;
+    public SecurityConfig(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
     }
 
     @Bean

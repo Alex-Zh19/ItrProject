@@ -1,7 +1,7 @@
 package com.itranzition.alex.controller;
 
 import com.itranzition.alex.facade.UserFacade;
-import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
+import com.itranzition.alex.model.dto.BaseResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public ResponseHelloDto hello(HttpServletRequest request) {
+    public BaseResponseDto hello(HttpServletRequest request) {
         return facade.hello(request);
     }
 }

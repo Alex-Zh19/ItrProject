@@ -5,5 +5,5 @@ import lombok.Data;
 
 @Data
 public class ResponseHelloDto implements BaseResponseDto {
-    private StringBuilder message=new StringBuilder();
+    private String message;
 }
