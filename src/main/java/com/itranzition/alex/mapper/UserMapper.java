@@ -6,10 +6,8 @@ import com.itranzition.alex.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
-@Component
 public interface UserMapper {
 
     @Mappings({@Mapping(target = "email", source = "signUpDto.email"),

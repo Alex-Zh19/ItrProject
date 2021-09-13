@@ -26,13 +26,10 @@ public class UserFacade {
 
     public BaseResponseDto hello(HttpServletRequest request) {
         String token = tokenProvider.resolveToken(request);
-        User user = null;
-        if (token != null) {
-            String email = tokenProvider.getUserEmail(token);
-            user = userService.findUserByEmail(email);
-            if (user == null) {
-                throw new UsernameNotFoundException(String.format("User with email %s not found", email));
-            }
+        String email = tokenProvider.getUserEmail(token);
+        User user = userService.findUserByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User with email %s not found", email));
         }
         return createHelloResponse(user);
     }
