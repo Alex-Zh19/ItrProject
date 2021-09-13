@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  itr-app:
+    container_name: itr-app
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/postgres
+      - DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - LIQUIBASE_CHANGE_LOG=classpath:/liquibase/db.changelog-master.xml
+      - JWT_KEYWORD=qwertyokn
+      - JWT_PREFIX=Token_
+      - JWT_EXPIRATION=20000
+      - JWT_HEADER=Authorization
+  db:
+    container_name: itr-app-postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+
+    volumes:
+      -  appdocker/var/lib/postgresql/data/dock
+    ports:
+      - 5432:5432
+
+
