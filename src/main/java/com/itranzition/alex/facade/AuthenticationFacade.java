@@ -25,56 +25,70 @@ public class AuthenticationFacade {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Autowired
-    public AuthenticationFacade(AuthenticationManager authenticationManager, TokenProvider tokenProvider, UserService userService) {
+    public AuthenticationFacade(AuthenticationManager authenticationManager,
+                                TokenProvider tokenProvider, UserService userService,
+                                UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
         if (authenticationDTO.getEmail() == null || authenticationDTO.getPassword() == null) {
-            ResponseErrorDto responseErrorDto = new ResponseErrorDto();
-            responseErrorDto.setMessage(HttpStatus.BAD_REQUEST.value() + " " + HttpStatus.BAD_REQUEST.getReasonPhrase());
-            return responseErrorDto;
+            StringBuilder errorMessage = new StringBuilder(HttpStatus.BAD_REQUEST.value()).
+                    append(" ").
+                    append(HttpStatus.BAD_REQUEST.getReasonPhrase());
+            return createErrorResponse(errorMessage.toString());
         }
         try {
-            String email = authenticationDTO.getEmail();
-            String password = authenticationDTO.getPassword();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-            User user = userService.findUserByEmail(email);
+            User user = findUser(authenticationDTO);
             if (user == null) {
-                throw new UsernameNotFoundException(String.format("User with email %s not found", email));
+                throw new UsernameNotFoundException(String.format("User with email %s not found", user.getEmail()));
             }
-            String token = tokenProvider.createToken(email, user.getRole());
-            ResponseSignInDto responseSignInDto = new ResponseSignInDto();
-            responseSignInDto.setToken(token);
-            responseSignInDto.setEmail(email);
-            return responseSignInDto;
+            return createSignInResponse(user);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password");
         }
     }
 
     public BaseResponseDto signUp(SignUpDto signUpDto) {
-        if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
-                signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
-            ResponseErrorDto responseErrorDto = new ResponseErrorDto();
-            responseErrorDto.setMessage("Error 400 : \"Fill in required fields\"");
-            return responseErrorDto;
-        }
-        User user = UserMapper.USER_MAPPER.signUpDtoToUser(signUpDto);
-        if (signUpDto.getSurname() != null) {
-            user.setSurname(signUpDto.getSurname());
-        }
         if (!signUpDto.getPassword().equals(signUpDto.getConfirmPassword())) {
             throw new BadCredentialsException("User password and confirm password do not march");
         }
+        if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
+                signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
+            String errorMessage = "Error 400 : \"Fill in required fields\"";
+            return createErrorResponse(errorMessage);
+        }
+        User user = userMapper.signUpDtoToUser(signUpDto);
         User userRegistered = userService.addUser(user);
-        ResponseSignUpDto responseSignUpDto = new ResponseSignUpDto();
-        responseSignUpDto.setName(signUpDto.getName());
-        responseSignUpDto.setEmail(signUpDto.getEmail());
+        ResponseSignUpDto responseSignUpDto = userMapper.signUpDtoToResponseSignUpDto(signUpDto);
         return responseSignUpDto;
+    }
+
+    private User findUser(AuthenticationDto authenticationDto) {
+        String email = authenticationDto.getEmail();
+        String password = authenticationDto.getPassword();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        return userService.findUserByEmail(email);
+    }
+
+    private BaseResponseDto createSignInResponse(User user) {
+        String email = user.getEmail();
+        String token = tokenProvider.createToken(email, user.getRole());
+        ResponseSignInDto responseSignInDto = new ResponseSignInDto();
+        responseSignInDto.setToken(token);
+        responseSignInDto.setEmail(email);
+        return responseSignInDto;
+    }
+
+    private BaseResponseDto createErrorResponse(String message) {
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto();
+        responseErrorDto.setMessage(message);
+        return responseErrorDto;
     }
 }

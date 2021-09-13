@@ -5,13 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,27 +44,5 @@ public class User {
         this.password = password;
         this.surname = surname;
         this.role = role;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) && email.equals(user.email) &&
-                name.equals(user.name) && password.equals(user.password) &&
-                Objects.equals(surname, user.surname);
-    }
-
-    @Override
-    public int hashCode() {
-        int result=0;
-        int multiplier=31;
-        result=result+id.hashCode()*multiplier;
-        result=result*multiplier+email.hashCode();
-        result=result*multiplier+name.hashCode();
-        result=result*multiplier+password.hashCode();
-        result=result*multiplier+surname.hashCode();
-        return result;
     }
 }

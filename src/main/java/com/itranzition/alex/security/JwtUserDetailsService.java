@@ -1,7 +1,6 @@
 package com.itranzition.alex.security;
 
 import com.itranzition.alex.model.entity.User;
-import com.itranzition.alex.security.jwt.JwtUser;
 import com.itranzition.alex.security.jwt.JwtUserFactory;
 import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User with email %s not found", email));
         }
-        JwtUser jwtUser = JwtUserFactory.create(user);
-        return jwtUser;
+        return JwtUserFactory.create(user);
     }
 }
