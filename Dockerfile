@@ -8,7 +8,4 @@ RUN chmod +x mvnw
 
 COPY src ./src
 
-
-
-
-CMD ["./mvnw", "spring-boot:run"]
+CMD ["java","-jar","/ItrProject.jar"]
