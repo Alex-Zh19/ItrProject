@@ -25,7 +25,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=${PASS}
       - POSTGRES_USER=${USER}
-
     volumes:
       - dbstore/var/lib/postgresql/data/dock
     ports:
