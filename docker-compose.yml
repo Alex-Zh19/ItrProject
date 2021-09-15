@@ -26,7 +26,7 @@ services:
       - POSTGRES_PASSWORD=${PASS}
       - POSTGRES_USER=${USER}
     volumes:
-      - dbstore/var/lib/postgresql/data/dock
+      - dbstore:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
