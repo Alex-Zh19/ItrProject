@@ -6,6 +6,6 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 RUN chmod +x mvnw
 
-COPY src ./src
+COPY target/*.jar ItrProject.jar
 
 CMD ["java","-jar","/ItrProject.jar"]
