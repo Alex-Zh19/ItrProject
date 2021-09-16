@@ -19,6 +19,8 @@ services:
       - 8080:8080
     depends_on:
       - db
+      - rabbit
+      - rabbit-consumer
   db:
     container_name: itr-app-postgres
     image: postgres:latest
@@ -30,5 +32,21 @@ services:
     ports:
       - 5432:5432
 
+  rabbit:
+    container_name: itr-app-rabbitmq
+    image: rabbitmq:3-management-alpine
+    volumes:
+             - rabbitmq_log:/var/log/rabbitmq
+             - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  rabbit-consumer:
+    container_name: rabbit-consumer
+    build:  /home/alexandr/IdeaProjects/RabbitConsumer/.
+
 volumes:
   dbstore:
+  rabbitmq_log:
+  rabbitmq_data:

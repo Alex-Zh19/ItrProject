@@ -14,6 +14,8 @@ target/
 .sts4-cache
 
 .env
+META-INF
+.MF
 
 ### IntelliJ IDEA ###
 .idea
