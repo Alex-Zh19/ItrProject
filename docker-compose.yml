@@ -3,8 +3,7 @@ version: "3.7"
 services:
   itr-app:
     container_name: itr-app
-    build:
-      context: .
+    image: itr-app
     environment:
       - DB_URL=${DB_URL}
       - DB_DRIVER_CLASS_NAME=${DB_DRIVER_CLASS_NAME}
@@ -51,7 +50,9 @@ services:
 
   rabbit-consumer:
     container_name: rabbit-consumer
-    build:  /home/alexandr/IdeaProjects/RabbitConsumer/.
+    build:
+     context:  /home/alexandr/IdeaProjects/RabbitConsumer/
+     dockerfile: Dockerfile
     environment:
       - RABBIT_PASS=${RABBIT_PASS}
       - RABBIT_USERNAME=${RABBIT_USERNAME}

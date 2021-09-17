@@ -1,0 +1,4 @@
+email,name,password,surname,role
+bill@mail.ru,bill,$2a$10$S8Xhug338ilO0PcJRGTiV.ZRv8OXObxC3clxtb8Fdn47fd0YZcHVi,NULL,USER
+john@mail.ru,john,$2a$10$m/f2u1L5HzM7j0Xfib.3ZuHXIFSJ6uOIKgkDBn4vxCnNNBiQHZkfK,doe,USER
+
