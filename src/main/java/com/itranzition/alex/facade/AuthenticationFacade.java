@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
 @Component
@@ -70,9 +71,7 @@ public class AuthenticationFacade {
         }
         User user = userMapper.signUpDtoToUser(signUpDto);
         User userRegistered = userService.addUser(user);
-        System.out.println("user registered");
         producer.send(createLogMessage(userRegistered));
-        System.out.println("after sending");
         ResponseSignUpDto responseSignUpDto = userMapper.signUpDtoToResponseSignUpDto(signUpDto);
         return responseSignUpDto;
     }
@@ -80,7 +79,6 @@ public class AuthenticationFacade {
     private String createLogMessage(User user) {
         StringBuilder builder = new StringBuilder(user.toString()).
                 append(" sign up at ").append(LocalDateTime.now());
-        System.out.println("log created : "+builder.toString());
         return builder.toString();
     }
 

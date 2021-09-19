@@ -17,7 +17,6 @@ public class Producer {
     }
 
     public void send(String message) {
-        System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-        template.convertAndSend(ROUTING_KEY,message);
+        template.convertAndSend(ROUTING_KEY, message);
     }
 }

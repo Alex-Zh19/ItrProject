@@ -23,7 +23,6 @@ public class RabbitConfig {
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
                 new CachingConnectionFactory();
-        System.out.println("connectionFactory created");
         return connectionFactory;
     }
 
@@ -31,24 +30,21 @@ public class RabbitConfig {
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setExchange(EXCHANGE);
-        System.out.println("rabbitTemplate created");
         return rabbitTemplate;
     }
 
     @Bean
-    public Queue myQueue1() {
-        System.out.println("Queue created");
+    public Queue myQueue() {
         return new Queue(QUEUE_NAME);
     }
 
     @Bean
-    public DirectExchange directExchange() {System.out.println("exchange created");
+    public DirectExchange directExchange() {
         return new DirectExchange(EXCHANGE);
     }
 
     @Bean
     public Binding errorBinding1() {
-        System.out.println("binding created");
-        return BindingBuilder.bind(myQueue1()).to(directExchange()).with(ROUTING_KEY);
+        return BindingBuilder.bind(myQueue()).to(directExchange()).with(ROUTING_KEY);
     }
 }
