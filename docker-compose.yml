@@ -3,7 +3,9 @@ version: "3.7"
 services:
   itr-app:
     container_name: itr-app
-    image: itr-app
+    build:
+      context: /home/alexandr/IdeaProjects/ItrProject/
+      dockerfile: Dockerfile
     environment:
       - DB_URL=${DB_URL}
       - DB_DRIVER_CLASS_NAME=${DB_DRIVER_CLASS_NAME}
@@ -29,25 +31,28 @@ services:
       - rabbit-consumer
   db:
     container_name: itr-app-postgres
-    image: postgres:latest
+    image: postgres:13.2
     environment:
-      - POSTGRES_PASSWORD=${PASS}
       - POSTGRES_USER=${USER}
+      - POSTGRES_PASSWORD=${PASS}
     volumes:
       - dbstore:/var/lib/postgresql/data
     ports:
       - 5432:5432
-
   rabbit:
     container_name: itr-app-rabbitmq
     image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_PASS=${RABBIT_PASS}
+      - RABBITMQ_DEFAULT_USER=${RABBIT_USERNAME}
+      - RABBITMQ_DEFAULT_VHOST=/
+    hostname: ${RABBIT_HOST}
     volumes:
              - rabbitmq_log:/var/log/rabbitmq
              - rabbitmq_data:/var/lib/rabbitmq
     ports:
       - 15672:15672
       - 5672:5672
-
   rabbit-consumer:
     container_name: rabbit-consumer
     build:

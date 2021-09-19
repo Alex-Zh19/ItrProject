@@ -18,13 +18,12 @@ public class RabbitConfig {
     private String EXCHANGE;
     @Value("${rabbit.routing}")
     private String ROUTING_KEY;
-    @Value("${rabbit.host}")
-    private String HOST;
 
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory(HOST);
+                new CachingConnectionFactory();
+        System.out.println("connectionFactory created");
         return connectionFactory;
     }
 
@@ -32,21 +31,24 @@ public class RabbitConfig {
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setExchange(EXCHANGE);
+        System.out.println("rabbitTemplate created");
         return rabbitTemplate;
     }
 
     @Bean
     public Queue myQueue1() {
+        System.out.println("Queue created");
         return new Queue(QUEUE_NAME);
     }
 
     @Bean
-    public DirectExchange directExchange() {
+    public DirectExchange directExchange() {System.out.println("exchange created");
         return new DirectExchange(EXCHANGE);
     }
 
     @Bean
     public Binding errorBinding1() {
+        System.out.println("binding created");
         return BindingBuilder.bind(myQueue1()).to(directExchange()).with(ROUTING_KEY);
     }
 }
