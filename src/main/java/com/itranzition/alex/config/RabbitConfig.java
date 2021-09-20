@@ -21,9 +21,7 @@ public class RabbitConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory();
-        return connectionFactory;
+        return new CachingConnectionFactory();
     }
 
     @Bean
