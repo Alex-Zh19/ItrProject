@@ -16,7 +16,6 @@ target/
 .env
 META-INF
 .MF
-src/test
 
 ### IntelliJ IDEA ###
 .idea
