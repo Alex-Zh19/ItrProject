@@ -21,11 +21,11 @@ public class TokenProvider {
     @Value("${jwt.keyword}")
     private String keyword;
     @Value("${jwt.expiration}")
-    private long validityMilliseconds;
+    private long validityMilliseconds;//delete from tests
     @Value("${jwt.prefix}")
-    private String prefix;
+    private String prefix;//final
     @Value("${jwt.header}")
-    private String header;
+    private String header;//final
 
     private UserDetailsService userDetailsService;
 

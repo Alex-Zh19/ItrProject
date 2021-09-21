@@ -50,6 +50,9 @@ services:
      context:  /home/alexandr/IdeaProjects/RabbitConsumer/
      dockerfile: Dockerfile
     environment:
+      - RABBIT_PASS=${RABBIT_PASS}
+      - RABBIT_USERNAME=${RABBIT_USERNAME}
+      - RABBIT_PORT=5672
       - RABBIT_HOST=rabbit
       - RABBIT_QUEUE=${RABBIT_QUEUE}
 
