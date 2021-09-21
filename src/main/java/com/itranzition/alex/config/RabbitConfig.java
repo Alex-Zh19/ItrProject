@@ -1,5 +1,6 @@
 package com.itranzition.alex.config;
 
+import com.itranzition.alex.converter.RabbitConsumerMessageDtoMessageConverter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -18,16 +19,19 @@ public class RabbitConfig {
     private String EXCHANGE;
     @Value("${rabbit.routing}")
     private String ROUTING_KEY;
+    @Value("${spring.rabbitmq.host}")
+    private String HOST;
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        return new CachingConnectionFactory();
+        return new CachingConnectionFactory(HOST);
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setExchange(EXCHANGE);
+        rabbitTemplate.setMessageConverter(new RabbitConsumerMessageDtoMessageConverter());
         return rabbitTemplate;
     }
 

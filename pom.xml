@@ -22,7 +22,8 @@
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<playtika.testcontainer.rabbitmq.version>2.0.14</playtika.testcontainer.rabbitmq.version>
 		<playtika.testcontainer.postgres.version>2.0.13</playtika.testcontainer.postgres.version>
-		<maven.plugin.version>2.3</maven.plugin.version>
+		<maven.assembly.plugin.version>2.3</maven.assembly.plugin.version>
+		<maven.complier.plugin.version>3.8.1</maven.complier.plugin.version>
 		<spring.cloud.version>3.0.3</spring.cloud.version>
 	</properties>
 	<dependencies>
@@ -88,7 +89,7 @@
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-assembly-plugin</artifactId>
-			<version>${maven.plugin.version}</version>
+			<version>${maven.assembly.plugin.version}</version>
 			<type>maven-plugin</type>
 		</dependency>
 		<dependency>
@@ -120,7 +121,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>${maven.complier.plugin.version}</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>

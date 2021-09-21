@@ -1,8 +1,10 @@
 package com.itranzition.alex.model.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@AllArgsConstructor
+@Getter
 public class RabbitConsumerMessageDto {
     String message;
 }

@@ -1,5 +1,6 @@
 package com.itranzition.alex.rabbitmq;
 
+import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,7 @@ public class Producer {
         this.template = template;
     }
 
-    public void send(String message) {
-        template.convertAndSend(ROUTING_KEY, message);
+    public void send(RabbitConsumerMessageDto messageDto) {
+        template.convertAndSend(ROUTING_KEY, messageDto);
     }
 }
