@@ -2,6 +2,7 @@ package com.itranzition.alex.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -19,6 +20,13 @@ public class RabbitConfig {
     private String EXCHANGE;
     @Value("${rabbit.routing}")
     private String ROUTING_KEY;
+    @Value("${spring.rabbitmq.host}")
+    private String HOST;
+
+    @Bean
+    public ConnectionFactory connectionFactory(){
+        return new CachingConnectionFactory(HOST);
+    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
