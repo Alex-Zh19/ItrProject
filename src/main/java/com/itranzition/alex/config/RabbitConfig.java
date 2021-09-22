@@ -1,5 +1,7 @@
 package com.itranzition.alex.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
