@@ -12,15 +12,20 @@
 	<artifactId>itranzition</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>itranzition</name>
+	<packaging>jar</packaging>
 	<properties>
 		<jwt.version>0.9.1</jwt.version>
-		<java.version>14</java.version>
+		<java.version>11</java.version>
 		<jdbs.postgres.version>42.2.23</jdbs.postgres.version>
 		<lombok.version>1.18.20</lombok.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+		<playtika.testcontainer.rabbitmq.version>2.0.14</playtika.testcontainer.rabbitmq.version>
+		<playtika.testcontainer.postgres.version>2.0.13</playtika.testcontainer.postgres.version>
+		<maven.assembly.plugin.version>2.3</maven.assembly.plugin.version>
+		<maven.complier.plugin.version>3.8.1</maven.complier.plugin.version>
+		<spring.cloud.version>3.0.3</spring.cloud.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -28,7 +33,6 @@
 			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -58,7 +62,6 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -79,6 +82,34 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-assembly-plugin</artifactId>
+			<version>${maven.assembly.plugin.version}</version>
+			<type>maven-plugin</type>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bootstrap</artifactId>
+			<version>${spring.cloud.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.playtika.testcontainers</groupId>
+			<artifactId>embedded-rabbitmq</artifactId>
+			<version>${playtika.testcontainer.rabbitmq.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.playtika.testcontainers</groupId>
+			<artifactId>embedded-postgresql</artifactId>
+			<version>${playtika.testcontainer.postgres.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -87,11 +118,10 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>${maven.complier.plugin.version}</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -116,5 +146,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

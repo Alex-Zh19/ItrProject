@@ -3,11 +3,13 @@ package com.itranzition.alex.facade;
 import com.itranzition.alex.mapper.UserMapper;
 import com.itranzition.alex.model.dto.AuthenticationDto;
 import com.itranzition.alex.model.dto.BaseResponseDto;
+import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
 import com.itranzition.alex.model.dto.SignUpDto;
 import com.itranzition.alex.model.dto.impl.ResponseErrorDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignInDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignUpDto;
 import com.itranzition.alex.model.entity.User;
+import com.itranzition.alex.rabbitmq.Producer;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class AuthenticationFacade {
 
@@ -26,15 +30,17 @@ public class AuthenticationFacade {
     private final TokenProvider tokenProvider;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final Producer producer;
 
     @Autowired
     public AuthenticationFacade(AuthenticationManager authenticationManager,
                                 TokenProvider tokenProvider, UserService userService,
-                                UserMapper userMapper) {
+                                UserMapper userMapper, Producer producer) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.producer = producer;
     }
 
     public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
@@ -66,8 +72,17 @@ public class AuthenticationFacade {
         }
         User user = userMapper.signUpDtoToUser(signUpDto);
         User userRegistered = userService.addUser(user);
+        producer.send(createLogMessageDto(userRegistered));
         ResponseSignUpDto responseSignUpDto = userMapper.signUpDtoToResponseSignUpDto(signUpDto);
         return responseSignUpDto;
+    }
+
+    private RabbitConsumerMessageDto createLogMessageDto(User user) {
+        final String signUpAt = " sign up at ";
+        StringBuilder builder = new StringBuilder(user.toString()).
+                append(signUpAt).append(LocalDateTime.now());
+        RabbitConsumerMessageDto dto = new RabbitConsumerMessageDto(builder.toString());
+        return dto;
     }
 
     private User findUser(AuthenticationDto authenticationDto) {

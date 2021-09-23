@@ -4,31 +4,59 @@ services:
   itr-app:
     container_name: itr-app
     build:
-      context: .
+      context: /home/alexandr/IdeaProjects/ItrProject/
+      dockerfile: Dockerfile
     environment:
       - DB_URL=${DB_URL}
-      - DB_DRIVER_CLASS_NAME=${DB_DRIVER_CLASS_NAME}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
-      - LIQUIBASE_CHANGE_LOG=${LIQUIBASE_CHANGE_LOG}
       - JWT_KEYWORD=${JWT_KEY}
-      - JWT_PREFIX=${JWT_PREFIX}
       - JWT_EXPIRATION=${JWT_EXPIRATION}
-      - JWT_HEADER=${JWT_HEADER}
+      - RABBIT_PASS=${RABBIT_PASS}
+      - RABBIT_USERNAME=${RABBIT_USERNAME}
+      - RABBIT_PORT=5672
+      - RABBIT_HOST=rabbit
+      - RABBIT_ROUTING=${RABBIT_ROUTING}
+      - RABBIT_QUEUE=${RABBIT_QUEUE}
+      - RABBIT_EXCHANGE=${RABBIT_EXCHANGE}
     ports:
       - 8080:8080
     depends_on:
       - db
+      - rabbit
+      - rabbit-consumer
   db:
     container_name: itr-app-postgres
-    image: postgres:latest
+    image: postgres:13.2
     environment:
-      - POSTGRES_PASSWORD=${PASS}
       - POSTGRES_USER=${USER}
+      - POSTGRES_PASSWORD=${PASS}
     volumes:
       - dbstore:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  rabbit:
+    container_name: itr-app-rabbitmq
+    image: rabbitmq:3-management-alpine
+    volumes:
+      - rabbitmq_log:/var/log/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+  rabbit-consumer:
+    container_name: rabbit-consumer
+    build:
+     context:  /home/alexandr/IdeaProjects/rabbit-consumer/
+     dockerfile: Dockerfile
+    environment:
+      - RABBIT_PASS=${RABBIT_PASS}
+      - RABBIT_USERNAME=${RABBIT_USERNAME}
+      - RABBIT_PORT=5672
+      - RABBIT_HOST=rabbit
+      - RABBIT_QUEUE=${RABBIT_QUEUE}
 
 volumes:
   dbstore:
+  rabbitmq_log:
+  rabbitmq_data:
