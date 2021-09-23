@@ -56,11 +56,6 @@ public class RabbitConfig {
     }
 
     @Bean
-    public ObjectMapper mapper() {
-        return new ObjectMapper();
-    }
-
-    @Bean
     public MessageConverter messageConverter(ObjectMapper mapper) {
         return new Jackson2JsonMessageConverter(mapper);
     }
