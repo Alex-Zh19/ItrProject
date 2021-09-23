@@ -78,8 +78,9 @@ public class AuthenticationFacade {
     }
 
     private RabbitConsumerMessageDto createLogMessageDto(User user) {
+        final String signUpAt = " sign up at ";
         StringBuilder builder = new StringBuilder(user.toString()).
-                append(" sign up at ").append(LocalDateTime.now());
+                append(signUpAt).append(LocalDateTime.now());
         RabbitConsumerMessageDto dto = new RabbitConsumerMessageDto(builder.toString());
         return dto;
     }

@@ -20,12 +20,10 @@ import java.util.Date;
 public class TokenProvider {
     @Value("${jwt.keyword}")
     private String keyword;
-    @Value("${jwt.expiration}")
-    private long validityMilliseconds;//delete from tests
-    @Value("${jwt.prefix}")
-    private String prefix;//final
-    @Value("${jwt.header}")
-    private String header;//final
+    @Value("${jwt.expiration?:2000}")
+    private long validityMilliseconds;
+    private final String prefix = "Bearer ";
+    private final String header = "Authorization";
 
     private UserDetailsService userDetailsService;
 

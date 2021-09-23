@@ -1,7 +1,6 @@
 package com.itranzition.alex.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -26,15 +25,15 @@ public class RabbitConfig {
     private String HOST;
 
     @Bean
-    public ConnectionFactory connectionFactory(){
+    public ConnectionFactory connectionFactory() {
         return new CachingConnectionFactory(HOST);
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setExchange(EXCHANGE);
-        rabbitTemplate.setMessageConverter(messageConverter());
+        rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
 
@@ -54,7 +53,12 @@ public class RabbitConfig {
     }
 
     @Bean
-    public MessageConverter messageConverter(){
-        return new Jackson2JsonMessageConverter();
+    public ObjectMapper mapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public MessageConverter messageConverter(ObjectMapper mapper) {
+        return new Jackson2JsonMessageConverter(mapper);
     }
 }
