@@ -1,5 +1,6 @@
 package com.itranzition.alex.mapper;
 
+import com.itranzition.alex.model.dto.RegisteredUserDto;
 import com.itranzition.alex.model.dto.SignUpDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignUpDto;
 import com.itranzition.alex.model.entity.User;
@@ -19,4 +20,8 @@ public interface UserMapper {
     @Mappings({@Mapping(target = "email", source = "signUpDto.email"),
             @Mapping(target = "name", source = "signUpDto.name")})
     ResponseSignUpDto signUpDtoToResponseSignUpDto(SignUpDto signUpDto);
+
+    @Mappings({@Mapping(target = "email", source = "user.email"),
+            @Mapping(target = "name", source = "user.name")})
+    RegisteredUserDto userToRegisteredUserDto(User user);
 }

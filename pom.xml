@@ -25,6 +25,7 @@
 		<maven.assembly.plugin.version>2.3</maven.assembly.plugin.version>
 		<maven.complier.plugin.version>3.8.1</maven.complier.plugin.version>
 		<spring.cloud.version>3.0.3</spring.cloud.version>
+		<jackson.jaxr.version>2.4.2</jackson.jaxr.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -109,6 +110,11 @@
 			<artifactId>embedded-postgresql</artifactId>
 			<version>${playtika.testcontainer.postgres.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<version>${jackson.jaxr.version}</version>
 		</dependency>
 	</dependencies>
 
