@@ -3,6 +3,7 @@ package com.itranzition.alex.security.jwt;
 import com.itranzition.alex.exception.JwtAuthenticationException;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
