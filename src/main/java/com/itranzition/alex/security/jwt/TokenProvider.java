@@ -3,9 +3,10 @@ package com.itranzition.alex.security.jwt;
 import com.itranzition.alex.exception.JwtAuthenticationException;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
-import lombok.Data;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,18 +20,25 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
+@Setter
 public class TokenProvider {
-    @Value("${jwt.keyword}")
     private String keyword;
-    @Value("${jwt.expiration?:2000}")
     private long validityMilliseconds;
-    private final String prefix = "Bearer ";
-    private final String header = "Authorization";
-
+    private final String PREFIX = "Bearer ";
+    private final String HEADER = "Authorization";
+    private final String KEYWORD_PROP = "jwt.keyword";
+    private final String VALIDITY_MILLISEC_PROP = "jwt.expiration";
+    private final long DEFAULT_VALIDITY = 20000;
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public TokenProvider(JwtUserDetailsService jwtUserDetailsService) {
+    public TokenProvider(JwtUserDetailsService jwtUserDetailsService, Environment env) {
+        this.keyword = env.getProperty(KEYWORD_PROP);
+        try {
+            this.validityMilliseconds = Long.parseLong(env.resolvePlaceholders(VALIDITY_MILLISEC_PROP));
+        } catch (NumberFormatException e) {
+            this.validityMilliseconds=DEFAULT_VALIDITY;
+        }
         this.userDetailsService = jwtUserDetailsService;
     }
 
@@ -53,8 +61,8 @@ public class TokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String requestToken = request.getHeader(header);
-        if (requestToken != null && requestToken.startsWith(prefix)) {
+        String requestToken = request.getHeader(HEADER);
+        if (requestToken != null && requestToken.startsWith(PREFIX)) {
             return requestToken.substring(6, requestToken.length());
         }
         return null;
@@ -65,7 +73,7 @@ public class TokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(keyword).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Jwt token is expired or invalid "+ token, HttpStatus.UNAUTHORIZED);
+            throw new JwtAuthenticationException("Jwt token is expired or invalid " + token, HttpStatus.UNAUTHORIZED);
         }
     }
 
