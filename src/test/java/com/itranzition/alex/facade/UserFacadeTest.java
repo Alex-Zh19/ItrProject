@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,16 +33,16 @@ class UserFacadeTest {
         userService = mock(UserService.class);
         request = mock(HttpServletRequest.class);
         userFacade = new UserFacade(tokenProvider, userService);
-    }
-
-    @Test
-    void helloEquals() {
         User userFromBase =
                 new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
         when(tokenProvider.validateToken(any(String.class))).thenReturn(true);
         when(tokenProvider.resolveToken(any())).thenReturn("smth");
         when(tokenProvider.getUserEmail(any())).thenReturn(USER_EMAIL);
         when(userService.findUserByEmail(any(String.class))).thenReturn(userFromBase);
+    }
+
+    @Test
+    void shouldReturnTrueOnCorrectResponseForHelloEndpoint() {
         userFacade.hello(request);
         ResponseHelloDto responseHelloDtoExpected = createResponseHelloDtoExpected();
         ResponseHelloDto responseHelloDtoActual = (ResponseHelloDto) userFacade.hello(request);
@@ -49,13 +50,7 @@ class UserFacadeTest {
     }
 
     @Test
-    void helloNotNull() {
-        User userFromBase =
-                new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
-        when(tokenProvider.validateToken(any(String.class))).thenReturn(true);
-        when(tokenProvider.resolveToken(any())).thenReturn("smth");
-        when(tokenProvider.getUserEmail(any())).thenReturn(USER_EMAIL);
-        when(userService.findUserByEmail(any(String.class))).thenReturn(userFromBase);
+    void shouldReturnTrueOnNotNullResponseForHelloEndpoint() {
         userFacade.hello(request);
         ResponseHelloDto responseHelloDtoActual = (ResponseHelloDto) userFacade.hello(request);
         assertNotNull(responseHelloDtoActual);
@@ -69,5 +64,4 @@ class UserFacadeTest {
         helloDto.setMessage(responseMessageBuilder.toString());
         return helloDto;
     }
-
 }

@@ -3,10 +3,12 @@ package com.itranzition.alex.security.jwt;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -25,6 +27,8 @@ class TokenProviderTest {
     private final String USER_PASSWORD = "testPassword";
     private final String USER_NAME = "john";
     private final String KEYWORD_PROP = "jwt.keyword";
+    private final String VALIDITY_MILLISEC_PROP = "jwt.expiration";
+    private final long DEFAULT_VALIDITY = 200;
 
     private TokenProvider tokenProvider;
     private JwtUserDetailsService userDetailsService;
@@ -32,15 +36,17 @@ class TokenProviderTest {
 
     @BeforeEach
     void setUp() {
-        String keyword="key";
+        String keyword = "key";
         env = mock(Environment.class);
         when(env.getProperty(KEYWORD_PROP)).thenReturn(Base64.getEncoder().encodeToString(keyword.getBytes()));
+        when(env.getProperty(VALIDITY_MILLISEC_PROP, long.class, DEFAULT_VALIDITY)).thenReturn(DEFAULT_VALIDITY);
         userDetailsService = mock(JwtUserDetailsService.class);
-        tokenProvider = new TokenProvider(userDetailsService,env);
+        tokenProvider = new TokenProvider(userDetailsService, env);
     }
 
     @Test
-    void createToken() {
+    void shouldReturnTrueOnCreationNotNullToken() {
+        System.out.println(env.getProperty(VALIDITY_MILLISEC_PROP, long.class, DEFAULT_VALIDITY));//does this method return
         List<String> uRList = new ArrayList<>();
         uRList.add(USER_ROLE);
         JwtUser user = new JwtUser(1L, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_ROLE, uRList.stream().

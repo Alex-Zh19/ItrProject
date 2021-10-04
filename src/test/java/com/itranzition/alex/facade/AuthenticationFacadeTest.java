@@ -49,7 +49,7 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    void signInResponseNotNull() {
+    void shouldReturnTrueOnNotNullResponseForSignIn() {
         when(tokenProvider.createToken(any(), any())).thenReturn(TEST_TOKEN);
         AuthenticationDto authenticationDto = createAuthenticationDto();
         BaseResponseDto responseDto = facade.signIn(authenticationDto);
@@ -57,7 +57,7 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    void signInResponseCorrect() {
+    void shouldReturnTrueOnSuccessfulSignIn() {
         when(tokenProvider.createToken(any(), any())).thenReturn(TEST_TOKEN);
         AuthenticationDto authenticationDto = createAuthenticationDto();
         ResponseSignInDto responseSignInDtoExpected = createExpectedSignInDto();
@@ -66,7 +66,7 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    void signUp() {
+    void shouldReturnTrueOnSuccessfulRegistration() {
         SignUpDto dtoFromController = createSignUpDto();
         ResponseSignUpDto responseSignUpDtoExpected = createExpectedSignUpDto();
         ResponseSignUpDto responseSignUpDtoActual = (ResponseSignUpDto) facade.signUp(dtoFromController);

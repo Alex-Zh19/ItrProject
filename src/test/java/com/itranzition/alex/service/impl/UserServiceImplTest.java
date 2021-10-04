@@ -34,7 +34,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void addUser() {
+    void shouldReturnTrueOnAddingUserToBase() {
         User expectedUser = new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
         when(userRepository.save(any(User.class))).thenReturn(expectedUser);
         User actualUser = userService.addUser(expectedUser);
@@ -42,7 +42,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserByEmail() {
+    void shouldReturnOkOnFindingUserAtBase() {
         User expectedUser = new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.of(expectedUser));
         User actualUser = userService.findUserByEmail(USER_EMAIL);
