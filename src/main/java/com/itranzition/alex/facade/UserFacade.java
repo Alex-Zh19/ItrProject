@@ -6,6 +6,8 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -26,12 +28,15 @@ public class UserFacade {
 
     public BaseResponseDto hello(HttpServletRequest request) {
         String token = tokenProvider.resolveToken(request);
-        String email = tokenProvider.getUserEmail(token);
-        User user = userService.findUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User with email %s not found", email));
+        if (token != null && !token.isBlank()) {
+            String email = tokenProvider.getUserEmail(token);
+            User user = userService.findUserByEmail(email);
+            if (user == null) {
+                throw new UsernameNotFoundException(String.format("User with email %s not found", email));
+            }
+            return createHelloResponse(user);
         }
-        return createHelloResponse(user);
+        throw new BadCredentialsException("Error 401 : \"" + HttpStatus.UNAUTHORIZED.getReasonPhrase() + "\"");
     }
 
     private BaseResponseDto createHelloResponse(User user) {

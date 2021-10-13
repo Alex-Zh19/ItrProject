@@ -1,8 +1,8 @@
 package com.itranzition.alex.service.impl;
 
-import com.itranzition.alex.service.UserService;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.repository.UserRepository;
+import com.itranzition.alex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,8 +41,13 @@ public class UserServiceImpl implements UserService {
             result = optionalUser.get();
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("User with email %s have already exist", email));
+                    String.format("User with email %s do not exist", email));
         }
         return result;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

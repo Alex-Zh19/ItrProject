@@ -1,6 +1,7 @@
 package com.itranzition.alex.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itranzition.alex.properties.RabbitConfigurationProperties;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -11,21 +12,25 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @EnableRabbit
 @Configuration
 public class RabbitConfig {
-    @Value("${rabbit.queue}")
     private String QUEUE_NAME;
-    @Value("${rabbit.exchange}")
     private String EXCHANGE;
-    @Value("${rabbit.routing}")
     private String ROUTING_KEY;
-    @Value("${spring.rabbitmq.host}")
     private String HOST;
+    private RabbitConfigurationProperties properties;
+
+    public RabbitConfig(RabbitConfigurationProperties properties) {
+        this.properties = properties;
+        QUEUE_NAME = properties.getQueue();
+        EXCHANGE = properties.getExchange();
+        ROUTING_KEY = properties.getRouting();
+        HOST = properties.getHost();
+    }
 
     @Bean
     public ConnectionFactory connectionFactory() {

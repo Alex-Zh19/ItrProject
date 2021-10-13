@@ -1,8 +1,8 @@
 package com.itranzition.alex.controller;
 
-import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.facade.AuthenticationFacade;
 import com.itranzition.alex.model.dto.AuthenticationDto;
+import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.model.dto.SignUpDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

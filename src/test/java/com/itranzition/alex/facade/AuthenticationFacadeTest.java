@@ -11,16 +11,21 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.rabbitmq.Producer;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class AuthenticationFacadeTest {
     private final String USER_EMAIL = "testEmail@mail.ru";
     private final String USER_ROLE = "USER";
@@ -29,27 +34,24 @@ class AuthenticationFacadeTest {
     private final String USER_SURNAME = "doe";
     private final String TEST_TOKEN = "token";
 
+    @Mock
     private AuthenticationManager authenticationManager;
+    @Mock
     private TokenProvider tokenProvider;
+    @Mock
     private UserService userService;
-    private UserMapper userMapper;
+    @Spy
+    private UserMapper userMapper = new UserMapperImpl();
+    @Mock
     private Producer producer;
+    @InjectMocks
     private AuthenticationFacade facade;
 
-    @BeforeEach
-    void setUp() {
-        authenticationManager = mock(AuthenticationManager.class);
-        userService = mock(UserService.class);
-        userMapper = new UserMapperImpl();
-        producer = mock(Producer.class);
-        tokenProvider = mock(TokenProvider.class);
-        facade = new AuthenticationFacade(authenticationManager, tokenProvider, userService, userMapper, producer);
+    @Test
+    @DisplayName("test should return true when method return not null response for sign in endpoint")
+    void shouldReturnTrueOnNotNullResponseForSignIn() {
         User userFromBase = new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
         when(userService.findUserByEmail(any())).thenReturn(userFromBase);
-    }
-
-    @Test
-    void shouldReturnTrueOnNotNullResponseForSignIn() {
         when(tokenProvider.createToken(any(), any())).thenReturn(TEST_TOKEN);
         AuthenticationDto authenticationDto = createAuthenticationDto();
         BaseResponseDto responseDto = facade.signIn(authenticationDto);
@@ -57,7 +59,10 @@ class AuthenticationFacadeTest {
     }
 
     @Test
+    @DisplayName("test should return true when sign in passed correctly")
     void shouldReturnTrueOnSuccessfulSignIn() {
+        User userFromBase = new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
+        when(userService.findUserByEmail(any())).thenReturn(userFromBase);
         when(tokenProvider.createToken(any(), any())).thenReturn(TEST_TOKEN);
         AuthenticationDto authenticationDto = createAuthenticationDto();
         ResponseSignInDto responseSignInDtoExpected = createExpectedSignInDto();
@@ -66,6 +71,7 @@ class AuthenticationFacadeTest {
     }
 
     @Test
+    @DisplayName("test should return true when registration passed correctly")
     void shouldReturnTrueOnSuccessfulRegistration() {
         SignUpDto dtoFromController = createSignUpDto();
         ResponseSignUpDto responseSignUpDtoExpected = createExpectedSignUpDto();

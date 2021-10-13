@@ -1,11 +1,12 @@
 package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.exception.JwtAuthenticationException;
+import com.itranzition.alex.properties.JwtConfigurationProperties;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,28 +21,20 @@ import java.util.Date;
 
 @Component
 @Getter
+@NoArgsConstructor
 public class TokenProvider {
     private String keyword;
     private long validityMilliseconds;
     private final String PREFIX = "Bearer ";
     private final String HEADER = "Authorization";
-    private final String KEYWORD_PROP = "jwt.keyword";
-    private final String VALIDITY_MILLISEC_PROP = "jwt.expiration";
-    private final long DEFAULT_VALIDITY = 200;
     private UserDetailsService userDetailsService;
+    private JwtConfigurationProperties properties;
 
     @Autowired
-    public TokenProvider(JwtUserDetailsService jwtUserDetailsService, Environment env) {
-        this.keyword = env.getProperty(KEYWORD_PROP);
-        // this.validityMilliseconds = env.getRequiredProperty(VALIDITY_MILLISEC_PROP,long.class);//does this method return
-        //default value in case of ${other.prop}
-        System.out.println(validityMilliseconds);
-        try {
-            this.validityMilliseconds = Long.parseLong(env.resolveRequiredPlaceholders(VALIDITY_MILLISEC_PROP));
-        } catch (IllegalArgumentException e) {
-            this.validityMilliseconds = DEFAULT_VALIDITY;
-        }
-        //question
+    public TokenProvider(JwtUserDetailsService jwtUserDetailsService, JwtConfigurationProperties properties) {
+        this.properties = properties;
+        keyword = properties.getKeyword();
+        validityMilliseconds = properties.getExpiration();
         this.userDetailsService = jwtUserDetailsService;
     }
 

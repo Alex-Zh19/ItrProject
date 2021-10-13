@@ -2,7 +2,6 @@ package com.itranzition.alex.facade;
 
 import com.itranzition.alex.mapper.UserMapper;
 import com.itranzition.alex.model.dto.*;
-import com.itranzition.alex.model.dto.impl.ResponseErrorDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignInDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignUpDto;
 import com.itranzition.alex.model.entity.User;
@@ -42,10 +41,11 @@ public class AuthenticationFacade {
 
     public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
         if (authenticationDTO.getEmail() == null || authenticationDTO.getPassword() == null) {
-            StringBuilder errorMessage = new StringBuilder(HttpStatus.BAD_REQUEST.value()).
-                    append(" ").
-                    append(HttpStatus.BAD_REQUEST.getReasonPhrase());
-            return createErrorResponse(errorMessage.toString());
+            String errorMessage = new StringBuilder(HttpStatus.BAD_REQUEST.value())
+                    .append(" ")
+                    .append(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                    .toString();
+            throw new BadCredentialsException(errorMessage);
         }
         try {
             User user = findUser(authenticationDTO);
@@ -64,8 +64,10 @@ public class AuthenticationFacade {
         }
         if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
                 signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
-            String errorMessage = "Error 400 : \"Fill in required fields\"";
-            return createErrorResponse(errorMessage);
+            throw new BadCredentialsException("Error 400 : \"Fill in required fields\"");
+        }
+        if (userService.existsByEmail(signUpDto.getEmail())) {
+            throw new BadCredentialsException("User with email " + signUpDto.getEmail() + " is already exist");
         }
         User user = userMapper.signUpDtoToUser(signUpDto);
         User userRegistered = userService.addUser(user);
@@ -94,11 +96,5 @@ public class AuthenticationFacade {
         responseSignInDto.setToken(token);
         responseSignInDto.setEmail(email);
         return responseSignInDto;
-    }
-
-    private BaseResponseDto createErrorResponse(String message) {
-        ResponseErrorDto responseErrorDto = new ResponseErrorDto();
-        responseErrorDto.setMessage(message);
-        return responseErrorDto;
     }
 }
