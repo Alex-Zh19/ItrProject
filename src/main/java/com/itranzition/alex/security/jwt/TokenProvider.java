@@ -23,8 +23,8 @@ import java.util.Date;
 public class TokenProvider {
     private String keyword;
     private long validityMilliseconds;
-    private final String PREFIX = "Bearer ";
-    private final String HEADER = "Authorization";
+    private static final String PREFIX = "Bearer ";
+    private static final String HEADER = "Authorization";
     private final int PREFIX_ENDING_POSITION = 7;
     private UserDetailsService userDetailsService;
     private JwtConfigurationProperties properties;

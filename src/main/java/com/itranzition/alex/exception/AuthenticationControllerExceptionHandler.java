@@ -11,14 +11,12 @@ public class AuthenticationControllerExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class})
     public ResponseErrorDto handleBadCredentialsException(BadCredentialsException e) {
-        ResponseErrorDto responseDto = createErrorResponse("Error 400 : Bad credentials" + e.getMessage());
-        return responseDto;
+        return createErrorResponse("Error 400 : Bad credentials" + e.getMessage());
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})
     public ResponseErrorDto handleUsernameNotFoundException(UsernameNotFoundException e) {
-        ResponseErrorDto responseDto = createErrorResponse("User with email %s not found" + e.getMessage());
-        return responseDto;
+        return createErrorResponse("User with email %s not found" + e.getMessage());
     }
 
     private ResponseErrorDto createErrorResponse(String message) {

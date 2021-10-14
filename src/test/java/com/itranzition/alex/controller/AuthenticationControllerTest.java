@@ -14,11 +14,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -29,6 +33,7 @@ class AuthenticationControllerTest {
     private static final String TEST_SURNAME = "testUserSurname";
     private static final String TEST_ROLE = "testUserRole";
     private static User testUser;
+    private MockMvc mockMvc;
     @Autowired
     private AuthenticationController authenticationController;
     @MockBean
@@ -53,10 +58,17 @@ class AuthenticationControllerTest {
     @Test
     @DisplayName("test return true when all application works correctly on /auth/signin request")
     void signIn() {
-        System.out.println(testUser);
         repository.save(testUser);
-        BaseResponseDto responseDto = authenticationController.signIn(createAuthenticationDto());
-        assertNotNull(responseDto);
+        try {
+            mockMvc.perform(put("/api/auth/signin").contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content("{\"email\": \"" + TEST_EMAIL + "\", \"password\": \"" + TEST_PASSWORD + "\"}")).andExpect(status().isOk());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // BaseResponseDto responseDto = authenticationController.signIn(createAuthenticationDto());
+       // assertNotNull(responseDto);
     }
 
     @Test

@@ -18,46 +18,38 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 @Configuration
 public class RabbitConfig {
-    private String QUEUE_NAME;
-    private String EXCHANGE;
-    private String ROUTING_KEY;
-    private String HOST;
     private RabbitConfigurationProperties properties;
 
     public RabbitConfig(RabbitConfigurationProperties properties) {
         this.properties = properties;
-        QUEUE_NAME = properties.getQueue();
-        EXCHANGE = properties.getExchange();
-        ROUTING_KEY = properties.getRouting();
-        HOST = properties.getHost();
     }
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        return new CachingConnectionFactory(HOST);
+        return new CachingConnectionFactory(properties.getHost());
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setExchange(EXCHANGE);
+        rabbitTemplate.setExchange(properties.getExchange());
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
 
     @Bean
     public Queue myQueue() {
-        return new Queue(QUEUE_NAME);
+        return new Queue(properties.getQueue());
     }
 
     @Bean
     public DirectExchange directExchange() {
-        return new DirectExchange(EXCHANGE);
+        return new DirectExchange(properties.getExchange());
     }
 
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(myQueue()).to(directExchange()).with(ROUTING_KEY);
+        return BindingBuilder.bind(myQueue()).to(directExchange()).with(properties.getRouting());
     }
 
     @Bean
