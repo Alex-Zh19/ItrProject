@@ -10,24 +10,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @EnableConfigurationProperties(JwtConfigurationProperties.class)
 class TokenProviderTest {
-    private final String USER_EMAIL = "testEmail@mail.ru";
-    private final String USER_ROLE = "USER";
+    private final String TEST_EMAIL = "testEmail@mail.ru";
+    private final String TEST_ROLE = "USER";
     private final long DEFAULT_EXPIRATION = 20;
+    private final String TOKEN_PREFIX = "Bearer ";
+    private final String TOKEN_HEADER = "Authorization";
     private TokenProvider tokenProvider;
     @Mock
     private JwtConfigurationProperties properties;
     @Mock
     private JwtUserDetailsService userDetailsService;
+    @Mock
+    private HttpServletRequest request;
 
 
     @BeforeEach
@@ -42,9 +46,39 @@ class TokenProviderTest {
     @Test
     @DisplayName("test return true when method create not null token")
     void shouldReturnTrueOnCreationNotNullToken() {
-        List<String> uRList = new ArrayList<>();
-        uRList.add(USER_ROLE);
-        String token = tokenProvider.createToken(USER_EMAIL, USER_ROLE);
+        String token = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
         assertNotNull(token);
+    }
+
+    @Test
+    @DisplayName("test return true when method resolve token from header correctly")
+    void resolveToken() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        String token = createTokenForHeader(pureToken);
+        when(request.getHeader(anyString())).thenReturn(token);
+        String actualResolvedToken = tokenProvider.resolveToken(request);
+        assertEquals(pureToken, actualResolvedToken);
+    }
+
+    @Test
+    @DisplayName("test return true when method validate token as expected")
+    void validateToken() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        assertTrue(tokenProvider.validateToken(pureToken));
+    }
+
+    @Test
+    @DisplayName("test return true when method gets user email as expected")
+    void getUserEmail() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        String actualEmail = tokenProvider.getUserEmail(pureToken);
+        assertEquals(TEST_EMAIL, actualEmail);
+    }
+
+    private String createTokenForHeader(String pureToken) {
+        String result = new StringBuilder(TOKEN_PREFIX)
+                .append(pureToken)
+                .toString();
+        return result;
     }
 }

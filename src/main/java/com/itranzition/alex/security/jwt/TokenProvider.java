@@ -4,7 +4,6 @@ import com.itranzition.alex.exception.JwtAuthenticationException;
 import com.itranzition.alex.properties.JwtConfigurationProperties;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +19,13 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-@Getter
 @NoArgsConstructor
 public class TokenProvider {
     private String keyword;
     private long validityMilliseconds;
     private final String PREFIX = "Bearer ";
     private final String HEADER = "Authorization";
+    private final int PREFIX_ENDING_POSITION = 7;
     private UserDetailsService userDetailsService;
     private JwtConfigurationProperties properties;
 
@@ -59,7 +58,7 @@ public class TokenProvider {
     public String resolveToken(HttpServletRequest request) {
         String requestToken = request.getHeader(HEADER);
         if (requestToken != null && requestToken.startsWith(PREFIX)) {
-            return requestToken.substring(6, requestToken.length());
+            return requestToken.substring(PREFIX_ENDING_POSITION, requestToken.length());
         }
         return null;
     }

@@ -26,7 +26,7 @@ class UserFacadeTest {
     private final String USER_PASSWORD = "testPassword";
     private final String USER_NAME = "john";
     private final String USER_SURNAME = "doe";
-    private final String DEFAULT_MESSAGE = "hello";
+    private final String DEFAULT_MESSAGE = "hello ";
 
     @Mock
     private TokenProvider tokenProvider;

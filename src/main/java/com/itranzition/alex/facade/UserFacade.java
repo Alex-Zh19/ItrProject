@@ -18,7 +18,7 @@ public class UserFacade {
 
     private final TokenProvider tokenProvider;
     private final UserService userService;
-    private final String DEFAULT_MESSAGE = "hello";
+    private final String DEFAULT_MESSAGE = "hello ";
 
     @Autowired
     public UserFacade(TokenProvider tokenProvider, UserService userService) {
