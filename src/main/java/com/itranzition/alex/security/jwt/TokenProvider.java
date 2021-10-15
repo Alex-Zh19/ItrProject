@@ -6,7 +6,6 @@ import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -69,7 +68,7 @@ public class TokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(keyword).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Jwt token is expired or invalid " + token, HttpStatus.UNAUTHORIZED);
+            throw new JwtAuthenticationException("Jwt token is expired or invalid " + token);
         }
     }
 

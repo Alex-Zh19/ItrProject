@@ -24,7 +24,6 @@ class TokenProviderTest {
     private final String TEST_ROLE = "USER";
     private final long DEFAULT_EXPIRATION = 20;
     private final String TOKEN_PREFIX = "Bearer ";
-    private final String TOKEN_HEADER = "Authorization";
     private TokenProvider tokenProvider;
     @Mock
     private JwtConfigurationProperties properties;

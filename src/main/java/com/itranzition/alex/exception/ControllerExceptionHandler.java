@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 @ResponseBody
-public class AuthenticationControllerExceptionHandler extends ResponseEntityExceptionHandler {
+public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -30,7 +30,13 @@ public class AuthenticationControllerExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler({UnauthorizedException.class})
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public ResponseErrorDto handleUsernameNotFoundException(UnauthorizedException e) {
+    public ResponseErrorDto handleUnauthorizedException(UnauthorizedException e) {
+        return createErrorResponse(HttpStatus.UNAUTHORIZED, LocalDateTime.now(), e.getMessage());
+    }
+
+    @ExceptionHandler({JwtAuthenticationException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ResponseErrorDto handleJwtAuthenticationException(JwtAuthenticationException e) {
         return createErrorResponse(HttpStatus.UNAUTHORIZED, LocalDateTime.now(), e.getMessage());
     }
 
