@@ -64,7 +64,7 @@ public class AuthenticationFacade {
         }
         if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
                 signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
-            throw new BadCredentialsException("Error 400 : \"Fill in required fields\"");
+            throw new BadCredentialsException("Fill in required fields");
         }
         if (userService.existsByEmail(signUpDto.getEmail())) {
             throw new BadCredentialsException("User with email " + signUpDto.getEmail() + " is already exist");

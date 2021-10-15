@@ -1,7 +1,5 @@
 package com.itranzition.alex.controller;
 
-import com.itranzition.alex.model.dto.BaseResponseDto;
-import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
@@ -9,15 +7,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 class UserControllerTest {
     private final String TEST_EMAIL = "testEmail";
     private final String TEST_NAME = "testName";
@@ -26,6 +28,8 @@ class UserControllerTest {
     private final String TEST_ROLE = "testRole";
     private final String TOKEN_PREFIX = "Bearer ";
     private final String TOKEN_HEADER = "Authorization";
+    @Autowired
+    private MockMvc mockMvc;
     @Autowired
     private UserController userController;
     @SpyBean
@@ -40,26 +44,22 @@ class UserControllerTest {
 
     @Test
     @DisplayName("test return true when all application works correctly on /user/hello request and returns expected response")
-    void hello() {
-        MockHttpServletRequest request = createMockRequest();
-        BaseResponseDto actualResponseDto = userController.hello(request);
-        BaseResponseDto expectedResponseDto = createExpectedResponseUserController();
-        assertEquals(expectedResponseDto, actualResponseDto);
+    void hello() throws Exception {
+        String helloEndpoint = "/api/user/hello";
+        String token = createTestToken();
+        mockMvc.perform(get(helloEndpoint).contentType(MediaType.APPLICATION_JSON)
+                        .content(createJsonRequest()).header(TOKEN_HEADER, token)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
-    private BaseResponseDto createExpectedResponseUserController() {
-        ResponseHelloDto expectedResponse = new ResponseHelloDto();
-        expectedResponse.setMessage("hello " + TEST_NAME);
-        return expectedResponse;
-    }
-
-    private MockHttpServletRequest createMockRequest() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addParameter("email", TEST_EMAIL);
-        request.addParameter("password", TEST_PASSWORD);
-        String testToken = createTestToken();
-        request.addHeader(TOKEN_HEADER, testToken);
-        return request;
+    private String createJsonRequest() {
+        String result = new StringBuilder("{\"email\": \"")
+                .append(TEST_EMAIL)
+                .append("\", \"password\": \"")
+                .append(TEST_PASSWORD)
+                .append("\"}").toString();
+        return result;
     }
 
     private String createTestToken() {

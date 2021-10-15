@@ -2,8 +2,10 @@ package com.itranzition.alex.controller;
 
 import com.itranzition.alex.facade.UserFacade;
 import com.itranzition.alex.model.dto.BaseResponseDto;
+import com.itranzition.alex.model.dto.UserHelloDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public BaseResponseDto hello(HttpServletRequest request) {
-        return facade.hello(request);
+    public BaseResponseDto hello(HttpServletRequest request, @RequestBody UserHelloDto helloDto) {
+        return facade.hello(request, helloDto);
     }
 }

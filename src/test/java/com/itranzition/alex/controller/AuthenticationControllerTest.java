@@ -1,9 +1,5 @@
 package com.itranzition.alex.controller;
 
-import com.itranzition.alex.model.dto.AuthenticationDto;
-import com.itranzition.alex.model.dto.BaseResponseDto;
-import com.itranzition.alex.model.dto.SignUpDto;
-import com.itranzition.alex.model.dto.impl.ResponseSignUpDto;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.rabbitmq.Producer;
 import com.itranzition.alex.repository.UserRepository;
@@ -12,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -19,13 +16,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 class AuthenticationControllerTest {
     private static final String TEST_EMAIL = "testUserEmail@mail.ru";
     private static final String TEST_NAME = "testUserName";
@@ -33,6 +30,7 @@ class AuthenticationControllerTest {
     private static final String TEST_SURNAME = "testUserSurname";
     private static final String TEST_ROLE = "testUserRole";
     private static User testUser;
+    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private AuthenticationController authenticationController;
@@ -45,7 +43,6 @@ class AuthenticationControllerTest {
 
     @BeforeAll
     static void setUpUserInformation() {
-        System.out.println("66 fuck");
         testUser = new User(1L, TEST_EMAIL, TEST_NAME,
                 TEST_PASSWORD, TEST_SURNAME, TEST_ROLE);
     }
@@ -57,49 +54,44 @@ class AuthenticationControllerTest {
 
     @Test
     @DisplayName("test return true when all application works correctly on /auth/signin request")
-    void signIn() {
+    void signIn() throws Exception {
         repository.save(testUser);
-        try {
-            mockMvc.perform(put("/api/auth/signin").contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content("{\"email\": \"" + TEST_EMAIL + "\", \"password\": \"" + TEST_PASSWORD + "\"}")).andExpect(status().isOk());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // BaseResponseDto responseDto = authenticationController.signIn(createAuthenticationDto());
-       // assertNotNull(responseDto);
+        String signInEndpoint = "/api/auth/signin";
+        mockMvc.perform(get(signInEndpoint).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(createAuthenticationJson())).andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("test return true when all application works correctly on /auth/signup request")
-    void signUp() {
-        BaseResponseDto actualResponseDto = authenticationController.signUp(createSignUpDto());
-        BaseResponseDto expectedResponseDto = createExpectedSignUpResponseDto();
-        assertEquals(expectedResponseDto, actualResponseDto);
+    void signUp() throws Exception {
+        String signUpEndpoint = "/api/auth/signup";
+        mockMvc.perform(post(signUpEndpoint).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(createSignUpJson())).andExpect(status().isOk());
     }
 
-    private AuthenticationDto createAuthenticationDto() {
-        AuthenticationDto dto = new AuthenticationDto();
-        dto.setEmail(TEST_EMAIL);
-        dto.setPassword(TEST_PASSWORD);
-        return dto;
+    private String createAuthenticationJson() {
+        String result = new StringBuilder("{\"email\": \"")
+                .append(TEST_EMAIL)
+                .append("\", \"password\": \"")
+                .append(TEST_PASSWORD)
+                .append("\"}").toString();
+        return result;
     }
 
-    private SignUpDto createSignUpDto() {
-        SignUpDto dto = new SignUpDto();
-        dto.setEmail(TEST_EMAIL);
-        dto.setName(TEST_NAME);
-        dto.setPassword(TEST_PASSWORD);
-        dto.setConfirmPassword(TEST_PASSWORD);
-        dto.setSurname(TEST_SURNAME);
-        return dto;
-    }
-
-    private BaseResponseDto createExpectedSignUpResponseDto() {
-        ResponseSignUpDto responseSignUpDto = new ResponseSignUpDto();
-        responseSignUpDto.setEmail(TEST_EMAIL);
-        responseSignUpDto.setName(TEST_NAME);
-        return responseSignUpDto;
+    private String createSignUpJson() {
+        String result = new StringBuilder("{\"email\": \"")
+                .append(TEST_EMAIL)
+                .append("\", \"name\": \"")
+                .append(TEST_NAME)
+                .append("\", \"password\": \"")
+                .append(TEST_PASSWORD)
+                .append("\", \"confirmPassword\": \"")
+                .append(TEST_PASSWORD)
+                .append("\", \"surname\": \"")
+                .append(TEST_SURNAME)
+                .append("\"}").toString();
+        return result;
     }
 }

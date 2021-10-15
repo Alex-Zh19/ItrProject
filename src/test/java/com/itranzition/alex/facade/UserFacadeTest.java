@@ -1,5 +1,6 @@
 package com.itranzition.alex.facade;
 
+import com.itranzition.alex.model.dto.UserHelloDto;
 import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,6 +33,8 @@ class UserFacadeTest {
     @Mock
     private TokenProvider tokenProvider;
     @Mock
+    private AuthenticationManager authenticationManager;
+    @Mock
     private UserService userService;
     @Mock
     private HttpServletRequest request;
@@ -49,17 +53,19 @@ class UserFacadeTest {
     @Test
     @DisplayName("test should return true when method return expected response for hello endpoint")
     void shouldReturnTrueOnCorrectResponseForHelloEndpoint() {
-        userFacade.hello(request);
+        UserHelloDto dto = createUserHelloDto();
+        userFacade.hello(request, dto);
         ResponseHelloDto responseHelloDtoExpected = createResponseHelloDtoExpected();
-        ResponseHelloDto responseHelloDtoActual = (ResponseHelloDto) userFacade.hello(request);
+        ResponseHelloDto responseHelloDtoActual = (ResponseHelloDto) userFacade.hello(request, dto);
         assertEquals(responseHelloDtoExpected, responseHelloDtoActual);
     }
 
     @Test
     @DisplayName("test should return true when method return not null response for hello endpoint")
     void shouldReturnTrueOnNotNullResponseForHelloEndpoint() {
-        userFacade.hello(request);
-        ResponseHelloDto responseHelloDtoActual = (ResponseHelloDto) userFacade.hello(request);
+        UserHelloDto dto = createUserHelloDto();
+        userFacade.hello(request, dto);
+        ResponseHelloDto responseHelloDtoActual = (ResponseHelloDto) userFacade.hello(request, dto);
         assertNotNull(responseHelloDtoActual);
     }
 
@@ -70,5 +76,12 @@ class UserFacadeTest {
                 append(USER_NAME);
         helloDto.setMessage(responseMessageBuilder.toString());
         return helloDto;
+    }
+
+    private UserHelloDto createUserHelloDto() {
+        UserHelloDto dto = new UserHelloDto();
+        dto.setEmail(USER_EMAIL);
+        dto.setPassword(USER_PASSWORD);
+        return dto;
     }
 }

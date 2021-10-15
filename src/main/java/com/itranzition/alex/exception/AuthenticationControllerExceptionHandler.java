@@ -1,27 +1,40 @@
 package com.itranzition.alex.exception;
 
 import com.itranzition.alex.model.dto.impl.ResponseErrorDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class AuthenticationControllerExceptionHandler {
+@ResponseBody
+public class AuthenticationControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseErrorDto handleBadCredentialsException(BadCredentialsException e) {
-        return createErrorResponse("Error 400 : Bad credentials" + e.getMessage());
+        return createErrorResponse(HttpStatus.BAD_REQUEST, LocalDateTime.now(), e.getMessage());
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ResponseErrorDto handleUsernameNotFoundException(UsernameNotFoundException e) {
-        return createErrorResponse("User with email %s not found" + e.getMessage());
+        return createErrorResponse(HttpStatus.NOT_FOUND, LocalDateTime.now(), e.getMessage());
     }
 
-    private ResponseErrorDto createErrorResponse(String message) {
-        ResponseErrorDto responseErrorDto = new ResponseErrorDto();
-        responseErrorDto.setMessage(message);
-        return responseErrorDto;
+    @ExceptionHandler({UnauthorizedException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ResponseErrorDto handleUsernameNotFoundException(UnauthorizedException e) {
+        return createErrorResponse(HttpStatus.UNAUTHORIZED, LocalDateTime.now(), e.getMessage());
+    }
+
+    private ResponseErrorDto createErrorResponse(HttpStatus status, LocalDateTime date, String message) {
+        return new ResponseErrorDto(status, date, message);
     }
 }
