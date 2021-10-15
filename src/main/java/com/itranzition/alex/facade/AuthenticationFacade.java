@@ -1,10 +1,7 @@
 package com.itranzition.alex.facade;
 
 import com.itranzition.alex.mapper.UserMapper;
-import com.itranzition.alex.model.dto.AuthenticationDto;
-import com.itranzition.alex.model.dto.BaseResponseDto;
-import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
-import com.itranzition.alex.model.dto.SignUpDto;
+import com.itranzition.alex.model.dto.*;
 import com.itranzition.alex.model.dto.impl.ResponseErrorDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignInDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignUpDto;
@@ -78,10 +75,8 @@ public class AuthenticationFacade {
     }
 
     private RabbitConsumerMessageDto createLogMessageDto(User user) {
-        final String signUpAt = " sign up at ";
-        StringBuilder builder = new StringBuilder(user.toString()).
-                append(signUpAt).append(LocalDateTime.now());
-        RabbitConsumerMessageDto dto = new RabbitConsumerMessageDto(builder.toString());
+        RegisteredUserDto registeredUserDto = userMapper.userToRegisteredUserDto(user);
+        RabbitConsumerMessageDto dto = new RabbitConsumerMessageDto(registeredUserDto, LocalDateTime.now());
         return dto;
     }
 
