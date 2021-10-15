@@ -21,20 +21,21 @@ import java.util.Date;
 @Component
 @NoArgsConstructor
 public class TokenProvider {
-    private String keyword;
-    private long validityMilliseconds;
     private static final String PREFIX = "Bearer ";
     private static final String HEADER = "Authorization";
-    private final int PREFIX_ENDING_POSITION = 7;
+    private static final int PREFIX_ENDING_POSITION = 7;
+    private String keyword;
+    private long validityMilliseconds;
+
     private UserDetailsService userDetailsService;
     private JwtConfigurationProperties properties;
 
     @Autowired
     public TokenProvider(JwtUserDetailsService jwtUserDetailsService, JwtConfigurationProperties properties) {
         this.properties = properties;
+        this.userDetailsService = jwtUserDetailsService;
         keyword = properties.getKeyword();
         validityMilliseconds = properties.getExpiration();
-        this.userDetailsService = jwtUserDetailsService;
     }
 
     @PostConstruct

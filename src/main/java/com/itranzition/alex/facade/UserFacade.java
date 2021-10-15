@@ -17,10 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class UserFacade {
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UserService userService;
     private final String DEFAULT_MESSAGE = "hello ";
+
 
     @Autowired
     public UserFacade(AuthenticationManager authenticationManager, TokenProvider tokenProvider,

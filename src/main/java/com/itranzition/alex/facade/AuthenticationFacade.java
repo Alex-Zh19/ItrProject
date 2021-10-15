@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 
 @Component
 public class AuthenticationFacade {
-
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UserService userService;
