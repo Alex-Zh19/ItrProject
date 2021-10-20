@@ -209,8 +209,8 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
                 <configuration>
-                    <destFile>${user.dir}/target/${project.artifactId}.exec</destFile>
-                    <outputDirectory>${user.dir}/${project.artifactId}/target/coverage-reports/jacoco</outputDirectory>
+                    <destFile>${project.basedir}/target/jacoco.exec</destFile>
+                    <outputDirectory>${project.basedir}/target/coverage-reports/jacoco</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

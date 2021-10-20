@@ -22,7 +22,6 @@ import java.util.Date;
 public class TokenProvider {
     private static final String PREFIX = "Bearer ";
     private static final String HEADER = "Authorization";
-    private static final int PREFIX_ENDING_POSITION = 7;
     private String keyword;
     private long validityMilliseconds;
 
@@ -58,7 +57,7 @@ public class TokenProvider {
     public String resolveToken(HttpServletRequest request) {
         String requestToken = request.getHeader(HEADER);
         if (requestToken != null && requestToken.startsWith(PREFIX)) {
-            return requestToken.substring(PREFIX_ENDING_POSITION, requestToken.length());
+            return requestToken.substring(PREFIX.length(), requestToken.length());
         }
         return null;
     }

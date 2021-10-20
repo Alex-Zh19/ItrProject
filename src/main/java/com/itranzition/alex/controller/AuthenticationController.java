@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth/")
 public class AuthenticationController {
 
-    private AuthenticationFacade facade;
+    private final AuthenticationFacade facade;
 
     @Autowired
     public AuthenticationController(AuthenticationFacade facade) {

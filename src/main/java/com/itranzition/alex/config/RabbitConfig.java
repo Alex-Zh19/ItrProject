@@ -2,6 +2,7 @@ package com.itranzition.alex.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itranzition.alex.properties.RabbitConfigurationProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -17,12 +18,9 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableRabbit
 @Configuration
+@RequiredArgsConstructor
 public class RabbitConfig {
-    private RabbitConfigurationProperties properties;
-
-    public RabbitConfig(RabbitConfigurationProperties properties) {
-        this.properties = properties;
-    }
+    private final RabbitConfigurationProperties properties;
 
     @Bean
     public ConnectionFactory connectionFactory() {

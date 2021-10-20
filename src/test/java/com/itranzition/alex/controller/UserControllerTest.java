@@ -14,6 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.xml.bind.PrintConversionEvent;
+
+import java.security.Principal;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,8 +34,6 @@ class UserControllerTest {
     private final String TOKEN_HEADER = "Authorization";
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private UserController userController;
     @SpyBean
     private TokenProvider provider;
     @SpyBean
@@ -47,19 +49,10 @@ class UserControllerTest {
     void hello() throws Exception {
         String helloEndpoint = "/api/user/hello";
         String token = createTestToken();
-        mockMvc.perform(get(helloEndpoint).contentType(MediaType.APPLICATION_JSON)
-                        .content(createJsonRequest()).header(TOKEN_HEADER, token)
+        mockMvc.perform(get(helloEndpoint)
+                        .header(TOKEN_HEADER, token)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-    }
-
-    private String createJsonRequest() {
-        String result = new StringBuilder("{\"email\": \"")
-                .append(TEST_EMAIL)
-                .append("\", \"password\": \"")
-                .append(TEST_PASSWORD)
-                .append("\"}").toString();
-        return result;
     }
 
     private String createTestToken() {

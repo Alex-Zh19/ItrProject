@@ -32,8 +32,6 @@ class AuthenticationControllerTest {
     private static User testUser;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private AuthenticationController authenticationController;
     @MockBean
     private Producer producer;
     @MockBean
