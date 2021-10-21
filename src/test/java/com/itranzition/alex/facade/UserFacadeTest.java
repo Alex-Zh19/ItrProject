@@ -12,12 +12,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.security.Principal;
 import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,8 +33,6 @@ class UserFacadeTest {
     private final String DEFAULT_MESSAGE = "hello ";
 
     private UserFacade userFacade = new UserFacade();
-    @Spy
-    private Principal principal;
     @Mock
     private JwtUserDetailsService jwtUserDetailsService;
 
@@ -45,12 +41,12 @@ class UserFacadeTest {
 
     @BeforeEach
     void setUp() {
-        User userFromBase =
-                new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
-        when(properties.getExpiration()).thenReturn(10000L);
-        String keyword = Base64.getEncoder().encodeToString("tttt".getBytes());
-        when(properties.getKeyword()).thenReturn(keyword);
-        JwtUser jwtUser = JwtUserFactory.create(userFromBase);
+        JwtUser jwtUser = JwtUserFactory.create(new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE));
+        long expirationTime = 1000;
+        String plainKeyword = "key";
+        String encodedKeyword = Base64.getEncoder().encodeToString(plainKeyword.getBytes());
+        when(properties.getExpiration()).thenReturn(expirationTime);
+        when(properties.getKeyword()).thenReturn(encodedKeyword);
         when(jwtUserDetailsService.loadUserByUsername(anyString())).thenReturn(jwtUser);
         TokenProvider tokenProvider = new TokenProvider(jwtUserDetailsService, properties);
         String token = tokenProvider.createToken(USER_EMAIL, USER_ROLE);
