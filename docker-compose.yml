@@ -10,7 +10,7 @@ services:
       - DB_URL=${DB_URL}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
-      - JWT_KEYWORD=${JWT_KEY}
+      - JWT_KEYWORD=${JWT_KEYWORD}
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - RABBIT_PASS=${RABBIT_PASS}
       - RABBIT_USERNAME=${RABBIT_USERNAME}
@@ -29,8 +29,8 @@ services:
     container_name: itr-app-postgres
     image: postgres:13.2
     environment:
-      - POSTGRES_USER=${USER}
-      - POSTGRES_PASSWORD=${PASS}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - dbstore:/var/lib/postgresql/data
     ports:

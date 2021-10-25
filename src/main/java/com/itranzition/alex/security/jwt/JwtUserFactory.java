@@ -15,8 +15,8 @@ public final class JwtUserFactory {
     public static JwtUser create(User user) {
         List<String> userRoleList = new ArrayList<>();
         userRoleList.add(user.getRole());
-        return new JwtUser(user.getId(), user.getEmail(), user.getName(),
-                user.getPassword(), user.getRole(), mapToGrantedAuthority(userRoleList));
+        return new JwtUser(user.getEmail(),
+                user.getPassword(), mapToGrantedAuthority(userRoleList));
     }
 
     private static List<GrantedAuthority> mapToGrantedAuthority(List<String> userRoles) {

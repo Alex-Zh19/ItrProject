@@ -16,6 +16,7 @@ target/
 .env
 META-INF
 .MF
+.gradle
 
 ### IntelliJ IDEA ###
 .idea

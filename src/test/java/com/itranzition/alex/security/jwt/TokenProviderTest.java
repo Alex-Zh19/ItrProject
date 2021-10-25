@@ -1,96 +1,100 @@
 package com.itranzition.alex.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import com.itranzition.alex.properties.JwtConfigurationProperties;
+import com.itranzition.alex.security.JwtUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@ActiveProfiles("test")
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+@EnableConfigurationProperties(JwtConfigurationProperties.class)
 class TokenProviderTest {
-    @Autowired
-    private TokenProvider provider;
+    private final String TEST_EMAIL = "testEmail@mail.ru";
+    private final String TEST_ROLE = "USER";
+    private final long DEFAULT_EXPIRATION = 20;
+    private final String TOKEN_PREFIX = "Bearer ";
+    private TokenProvider tokenProvider;
+    @Mock
+    private JwtConfigurationProperties properties;
+    @Mock
+    private JwtUserDetailsService userDetailsService;
+    @Mock
+    private HttpServletRequest request;
 
-    @Value("${jwt.keyword}")
-    private String keyword;
-    @Value("${jwt.expiration?:2000}")
-    private long validityMilliseconds;
-    private final String prefix = "Bearer ";
-    private final String header = "Authorization";
-    private final String userEmail="testEmail@mail.ru";
-    private final String userRole = "USER";
-
-    @MockBean
-    private UserDetailsService userDetailsService;
-
-    @BeforeClass
-    void init (){
-        keyword = Base64.getEncoder().encodeToString(keyword.getBytes());
-    }
 
     @BeforeEach
-    void mockInit() {
-        List<String> userRoleList = new ArrayList<>();
-        userRoleList.add(userRole);
-        JwtUser jwtUser = new JwtUser((long)1,userEmail,"john","testPassword","doe",
-                mapToGrantedAuthorityTest(userRoleList));
-        Mockito.when(userDetailsService.loadUserByUsername(userEmail)).thenReturn(jwtUser);
+    void setUp() {
+        String pureKeyword = "key";
+        String encodedKeyword = Base64.getEncoder().encodeToString(pureKeyword.getBytes());
+        when(properties.getKeyword()).thenReturn(encodedKeyword);
+        when(properties.getExpiration()).thenReturn(DEFAULT_EXPIRATION);
+        tokenProvider = new TokenProvider(userDetailsService, properties);
     }
 
     @Test
-    void createToken() {
+    @DisplayName("test return true when method create not null token")
+    void createTokenNotNull() {
+        String token = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        assertNotNull(token);
     }
 
     @Test
+    @DisplayName("test return true when method resolve token from header correctly")
     void resolveToken() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        String token = createTokenForHeader(pureToken);
+        when(request.getHeader(anyString())).thenReturn(token);
+        String actualResolvedToken = tokenProvider.resolveToken(request);
+        assertEquals(pureToken, actualResolvedToken);
     }
 
     @Test
+    @DisplayName("test return true when method return null due to token absence")
+    void resolveTokenReturnNull() {
+        when(request.getHeader(anyString())).thenReturn(null);
+        String actualResolvedToken = tokenProvider.resolveToken(request);
+        assertNull(actualResolvedToken);
+    }
+
+    @Test
+    @DisplayName("test return true when method return null due to token invalidity (Header absence)")
+    void resolveTokenNull() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        when(request.getHeader(anyString())).thenReturn(pureToken);
+        String actualResolvedToken = tokenProvider.resolveToken(request);
+        assertNull(actualResolvedToken);
+    }
+
+    @Test
+    @DisplayName("test return true when method validate token as expected")
     void validateToken() {
-        String token=createTokenTest(userEmail,userRole);
-        Assert.assertTrue(provider.validateToken(token));
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        assertTrue(tokenProvider.validateToken(pureToken));
     }
 
     @Test
-    void getAuthentication() {
-    }
-
-    @Test
+    @DisplayName("test return true when method gets user email as expected")
     void getUserEmail() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        String actualEmail = tokenProvider.getUserEmail(pureToken);
+        assertEquals(TEST_EMAIL, actualEmail);
     }
 
-    private List<GrantedAuthority> mapToGrantedAuthorityTest(List<String> userRoles) {
-        return userRoles.stream().
-                map(SimpleGrantedAuthority::new).
-                collect(Collectors.toList());
-    }
-
-    private String createTokenTest(String email, String role) {
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("role", role);
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityMilliseconds * 1000);
-        return Jwts.builder().
-                setClaims(claims).
-                setIssuedAt(now).
-                setExpiration(validity).
-                signWith(SignatureAlgorithm.HS256, keyword).
-                compact();
+    private String createTokenForHeader(String pureToken) {
+        String result = new StringBuilder(TOKEN_PREFIX)
+                .append(pureToken)
+                .toString();
+        return result;
     }
 }

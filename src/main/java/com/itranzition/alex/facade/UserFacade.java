@@ -2,42 +2,24 @@ package com.itranzition.alex.facade;
 
 import com.itranzition.alex.model.dto.BaseResponseDto;
 import com.itranzition.alex.model.dto.impl.ResponseHelloDto;
-import com.itranzition.alex.model.entity.User;
-import com.itranzition.alex.security.jwt.TokenProvider;
-import com.itranzition.alex.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @Component
 public class UserFacade {
+    private final String DEFAULT_MESSAGE = "hello ";
 
-    private final TokenProvider tokenProvider;
-    private final UserService userService;
-    private final String DEFAULT_MESSAGE = "hello";
-
-    @Autowired
-    public UserFacade(TokenProvider tokenProvider, UserService userService) {
-        this.tokenProvider = tokenProvider;
-        this.userService = userService;
+    public BaseResponseDto hello() {
+        Principal principal = SecurityContextHolder.getContext().getAuthentication();
+        return createHelloResponse(principal.getName());
     }
 
-    public BaseResponseDto hello(HttpServletRequest request) {
-        String token = tokenProvider.resolveToken(request);
-        String email = tokenProvider.getUserEmail(token);
-        User user = userService.findUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User with email %s not found", email));
-        }
-        return createHelloResponse(user);
-    }
-
-    private BaseResponseDto createHelloResponse(User user) {
+    private BaseResponseDto createHelloResponse(String userEmail) {
         ResponseHelloDto responseHelloDto = new ResponseHelloDto();
         StringBuilder responseMessageBuilder = new StringBuilder(DEFAULT_MESSAGE).
-                append(user.getName());
+                append(userEmail);
         responseHelloDto.setMessage(responseMessageBuilder.toString());
         return responseHelloDto;
     }
