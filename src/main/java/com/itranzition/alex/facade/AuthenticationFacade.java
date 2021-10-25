@@ -48,9 +48,6 @@ public class AuthenticationFacade {
         }
         try {
             User user = findUser(authenticationDTO);
-            if (user == null) {
-                throw new UsernameNotFoundException(String.format("User with email %s not found", user.getEmail()));
-            }
             return createSignInResponse(user);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password");

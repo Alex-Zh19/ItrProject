@@ -22,9 +22,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.findUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User with email %s not found", email));
-        }
         return JwtUserFactory.create(user);
     }
 }

@@ -71,6 +71,7 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
 test {
     finalizedBy jacocoTestReport
     jacoco {
@@ -78,6 +79,7 @@ test {
     }
 
 }
+
 jacocoTestReport {
     dependsOn test
 }
@@ -93,25 +95,25 @@ jacocoTestCoverageVerification {
                     "com/itranzition/alex/config/*",
                     "com/itranzition/alex/rabbitmq/*",
                     "com/itranzition/alex/ItransitionApplication.class",
-                    "com/itranzition/alex/security/jwt/JwtUser.class"
-
+                    "com/itranzition/alex/security/jwt/JwtUser.class",
+                    "com/itranzition/alex/security/jwt/TokenFilter.class",
+                    "com/itranzition/alex/security/jwt/JwtUserFactory.class"
             ])
         })
     }
     violationRules {
-            rule {
-                element = "CLASS"
-                limit {
-                    counter = 'LINE'
-                    value = 'COVEREDRATIO'
-                    minimum = 0.9
-                }
-                limit {
-                    counter = 'BRANCH'
-                    value = 'COVEREDRATIO'
-                    minimum = 0.8
-                }
+        rule {
+            element = "CLASS"
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.9
             }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+            }
+        }
     }
 }
-

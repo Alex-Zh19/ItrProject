@@ -44,7 +44,7 @@ class TokenProviderTest {
 
     @Test
     @DisplayName("test return true when method create not null token")
-    void shouldReturnTrueOnCreationNotNullToken() {
+    void createTokenNotNull() {
         String token = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
         assertNotNull(token);
     }
@@ -57,6 +57,23 @@ class TokenProviderTest {
         when(request.getHeader(anyString())).thenReturn(token);
         String actualResolvedToken = tokenProvider.resolveToken(request);
         assertEquals(pureToken, actualResolvedToken);
+    }
+
+    @Test
+    @DisplayName("test return true when method return null due to token absence")
+    void resolveTokenReturnNull() {
+        when(request.getHeader(anyString())).thenReturn(null);
+        String actualResolvedToken = tokenProvider.resolveToken(request);
+        assertNull(actualResolvedToken);
+    }
+
+    @Test
+    @DisplayName("test return true when method return null due to token invalidity (Header absence)")
+    void resolveTokenNull() {
+        String pureToken = tokenProvider.createToken(TEST_EMAIL, TEST_ROLE);
+        when(request.getHeader(anyString())).thenReturn(pureToken);
+        String actualResolvedToken = tokenProvider.resolveToken(request);
+        assertNull(actualResolvedToken);
     }
 
     @Test
