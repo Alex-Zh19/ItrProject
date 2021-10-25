@@ -1,0 +1,72 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.itranzition.alex'
+version = '0.0.1-SNAPSHOT'
+description = 'itranzition'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext{
+    jsonwebtokenJjwtVersion="0.9.1"
+    springBootStarterVersion="2.5.4"
+    liquibaseCoreVersion="4.3.5"
+    postgresqlVersion="42.2.23"
+    mapstructVersion="1.4.2.Final"
+    lombokMapstructBindingVersion="0.2.0"
+    springRabbitmqVersion="2.3.10"
+    mavenAssemblityPluginVersion="2.3"
+    jaxrsJsonProviderVersion="2.4.2"
+    springSecurityTestVersion="5.5.2"
+    springCloudStarterVersion="3.0.3"
+    testcontaierRabbitmqVersion="2.0.14"
+    testcontainerPostgresqlVersion="2.0.13"
+    mockitoVersion="2.21.0"
+    lombokVersion="1.18.20"
+}
+
+dependencies {
+    implementation "io.jsonwebtoken:jjwt:${jsonwebtokenJjwtVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-jdbc:${springBootStarterVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootStarterVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-jdbc:${springBootStarterVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springBootStarterVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}"
+    implementation "org.liquibase:liquibase-core:${liquibaseCoreVersion}"
+    implementation "org.postgresql:postgresql:${postgresqlVersion}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    implementation "org.springframework.amqp:spring-rabbit:${springRabbitmqVersion}"
+    implementation "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${jaxrsJsonProviderVersion}"
+    implementation "org.springframework.boot:spring-boot-configuration-processor:${springBootStarterVersion}"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootStarterVersion}"
+    testImplementation "org.springframework.security:spring-security-test:${springSecurityTestVersion}"
+    testImplementation "org.springframework.cloud:spring-cloud-starter-bootstrap:${springCloudStarterVersion}"
+    testImplementation "com.playtika.testcontainers:embedded-rabbitmq:${testcontaierRabbitmqVersion}"
+    testImplementation "com.playtika.testcontainers:embedded-postgresql:${testcontainerPostgresqlVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
