@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.5.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.itranzition.alex'
@@ -24,22 +25,22 @@ configurations {
     }
 }
 
-ext{
-    jsonwebtokenJjwtVersion="0.9.1"
-    springBootStarterVersion="2.5.4"
-    liquibaseCoreVersion="4.3.5"
-    postgresqlVersion="42.2.23"
-    mapstructVersion="1.4.2.Final"
-    lombokMapstructBindingVersion="0.2.0"
-    springRabbitmqVersion="2.3.10"
-    mavenAssemblityPluginVersion="2.3"
-    jaxrsJsonProviderVersion="2.4.2"
-    springSecurityTestVersion="5.5.2"
-    springCloudStarterVersion="3.0.3"
-    testcontaierRabbitmqVersion="2.0.14"
-    testcontainerPostgresqlVersion="2.0.13"
-    mockitoVersion="2.21.0"
-    lombokVersion="1.18.20"
+ext {
+    jsonwebtokenJjwtVersion = "0.9.1"
+    springBootStarterVersion = "2.5.4"
+    liquibaseCoreVersion = "4.3.5"
+    postgresqlVersion = "42.2.23"
+    mapstructVersion = "1.4.2.Final"
+    lombokMapstructBindingVersion = "0.2.0"
+    springRabbitmqVersion = "2.3.10"
+    mavenAssemblityPluginVersion = "2.3"
+    jaxrsJsonProviderVersion = "2.4.2"
+    springSecurityTestVersion = "5.5.2"
+    springCloudStarterVersion = "3.0.3"
+    testcontaierRabbitmqVersion = "2.0.14"
+    testcontainerPostgresqlVersion = "2.0.13"
+    mockitoVersion = "2.21.0"
+    lombokVersion = "1.18.20"
 }
 
 dependencies {
@@ -70,3 +71,47 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+test {
+    finalizedBy jacocoTestReport
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+    }
+
+}
+jacocoTestReport {
+    dependsOn test
+}
+
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/itranzition/alex/exception/*",
+                    "com/itranzition/alex/model/*",
+                    "com/itranzition/alex/mapper/*",
+                    "com/itranzition/alex/properties/*",
+                    "com/itranzition/alex/config/*",
+                    "com/itranzition/alex/rabbitmq/*",
+                    "com/itranzition/alex/ItransitionApplication.class",
+                    "com/itranzition/alex/security/jwt/JwtUser.class"
+
+            ])
+        })
+    }
+    violationRules {
+            rule {
+                element = "CLASS"
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.9
+                }
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.8
+                }
+            }
+    }
+}
+
