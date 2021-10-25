@@ -8,7 +8,7 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.rabbitmq.Producer;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,23 +19,13 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
+@RequiredArgsConstructor
 public class AuthenticationFacade {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UserService userService;
     private final UserMapper userMapper;
     private final Producer producer;
-
-    @Autowired
-    public AuthenticationFacade(AuthenticationManager authenticationManager,
-                                TokenProvider tokenProvider, UserService userService,
-                                UserMapper userMapper, Producer producer) {
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
-        this.userService = userService;
-        this.userMapper = userMapper;
-        this.producer = producer;
-    }
 
     public BaseResponseDto signIn(AuthenticationDto authenticationDTO) {
         if (authenticationDTO.getEmail() == null || authenticationDTO.getPassword() == null) {

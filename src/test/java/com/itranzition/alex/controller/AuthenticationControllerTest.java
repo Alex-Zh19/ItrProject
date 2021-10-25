@@ -29,6 +29,11 @@ class AuthenticationControllerTest {
     private static final String TEST_PASSWORD = "testUserPassword";
     private static final String TEST_SURNAME = "testUserSurname";
     private static final String TEST_ROLE = "testUserRole";
+    private static final String AUTHENTICATION_JSON =
+            String.format("{\"email\": \"%s\", \"password\": \"%s\"}", TEST_EMAIL, TEST_PASSWORD);
+    private static final String SIGN_UP_JSON =
+            String.format("{\"email\": \"%s\", \"name\": \"%s\", \"password\": \"%s\", \"confirmPassword\": \"%s\", \"surname\": \"%s\"}",
+                    TEST_EMAIL, TEST_NAME, TEST_PASSWORD, TEST_PASSWORD, TEST_SURNAME);
     private static User testUser;
     @Autowired
     private MockMvc mockMvc;
@@ -57,7 +62,7 @@ class AuthenticationControllerTest {
         String signInEndpoint = "/api/auth/signin";
         mockMvc.perform(get(signInEndpoint).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(createAuthenticationJson())).andExpect(status().isOk());
+                .content(AUTHENTICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
@@ -66,30 +71,7 @@ class AuthenticationControllerTest {
         String signUpEndpoint = "/api/auth/signup";
         mockMvc.perform(post(signUpEndpoint).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(createSignUpJson())).andExpect(status().isOk());
-    }
-
-    private String createAuthenticationJson() {
-        String result = new StringBuilder("{\"email\": \"")
-                .append(TEST_EMAIL)
-                .append("\", \"password\": \"")
-                .append(TEST_PASSWORD)
-                .append("\"}").toString();
-        return result;
-    }
-
-    private String createSignUpJson() {
-        String result = new StringBuilder("{\"email\": \"")
-                .append(TEST_EMAIL)
-                .append("\", \"name\": \"")
-                .append(TEST_NAME)
-                .append("\", \"password\": \"")
-                .append(TEST_PASSWORD)
-                .append("\", \"confirmPassword\": \"")
-                .append(TEST_PASSWORD)
-                .append("\", \"surname\": \"")
-                .append(TEST_SURNAME)
-                .append("\"}").toString();
-        return result;
+                .content(SIGN_UP_JSON)).andExpect(status()
+                .isOk());
     }
 }

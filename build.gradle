@@ -71,14 +71,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-test {
     finalizedBy jacocoTestReport
     jacoco {
         destinationFile = file("$buildDir/jacoco/jacoco.exec")
     }
-
 }
 
 jacocoTestReport {
@@ -90,7 +86,7 @@ jacocoTestCoverageVerification {
         classDirectories.setFrom files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/itranzition/alex/exception/*",
-                    "com/itranzition/alex/model/*",
+                    "**/model/**",
                     "com/itranzition/alex/mapper/*",
                     "com/itranzition/alex/properties/*",
                     "com/itranzition/alex/config/*",

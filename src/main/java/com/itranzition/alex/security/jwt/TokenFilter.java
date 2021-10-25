@@ -1,5 +1,6 @@
 package com.itranzition.alex.security.jwt;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -12,12 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
+@RequiredArgsConstructor
 public class TokenFilter extends GenericFilterBean {
     private final TokenProvider provider;
-
-    public TokenFilter(TokenProvider provider) {
-        this.provider = provider;
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,

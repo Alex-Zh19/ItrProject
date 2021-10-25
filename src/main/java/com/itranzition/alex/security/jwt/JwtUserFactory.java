@@ -1,6 +1,7 @@
 package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.model.entity.User;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -8,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 public final class JwtUserFactory {
-    public JwtUserFactory() {
-    }
 
     public static JwtUser create(User user) {
         List<String> userRoleList = new ArrayList<>();
