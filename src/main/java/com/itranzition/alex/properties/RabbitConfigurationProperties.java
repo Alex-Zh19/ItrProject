@@ -9,5 +9,4 @@ public class RabbitConfigurationProperties {
     private String queue;
     private String routing;
     private String exchange;
-    private String host;
 }
