@@ -10,9 +10,5 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @ActiveProfiles("test")
 @EnableConfigurationProperties({JwtConfigurationProperties.class, RabbitConfigurationProperties.class})
-public class ItransitionApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
+public abstract class ItransitionApplicationTests {
 }

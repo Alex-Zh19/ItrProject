@@ -1,5 +1,6 @@
 package com.itranzition.alex.rabbitmq;
 
+import com.itranzition.alex.ItransitionApplicationTests;
 import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
 import com.itranzition.alex.model.dto.RegisteredUserDto;
 import com.itranzition.alex.properties.RabbitConfigurationProperties;
@@ -10,17 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
-@ActiveProfiles("test")
-class ProducerTest {
+class ProducerTest extends ItransitionApplicationTests {
     private final String TEST_EMAIL = "testEmail";
     private final String TEST_NAME = "testName";
 

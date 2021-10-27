@@ -1,5 +1,6 @@
 package com.itranzition.alex.controller;
 
+import com.itranzition.alex.ItransitionApplicationTests;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.TokenProvider;
 import com.itranzition.alex.service.UserService;
@@ -8,19 +9,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
-class UserControllerTest {
+class UserControllerTest extends ItransitionApplicationTests {
     private final String TEST_EMAIL = "testEmail";
     private final String TEST_NAME = "testName";
     private final String TEST_PASSWORD = "testPass";
