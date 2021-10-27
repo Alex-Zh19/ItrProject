@@ -1,7 +1,6 @@
 package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.model.entity.User;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

@@ -4,7 +4,6 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.security.jwt.JwtUserFactory;
 import com.itranzition.alex.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

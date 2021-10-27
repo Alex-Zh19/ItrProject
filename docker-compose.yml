@@ -47,8 +47,8 @@ services:
   rabbit-consumer:
     container_name: rabbit-consumer
     build:
-     context:  /home/alexandr/IdeaProjects/rabbit-consumer/
-     dockerfile: Dockerfile
+      context: /home/alexandr/IdeaProjects/rabbit-consumer/
+      dockerfile: Dockerfile
     environment:
       - RABBIT_PASS=${RABBIT_PASS}
       - RABBIT_USERNAME=${RABBIT_USERNAME}
