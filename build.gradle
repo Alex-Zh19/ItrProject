@@ -90,10 +90,8 @@ jacocoTestCoverageVerification {
                     "com/itranzition/alex/mapper/*",
                     "com/itranzition/alex/properties/*",
                     "com/itranzition/alex/config/*",
-                    "com/itranzition/alex/rabbitmq/*",
                     "com/itranzition/alex/ItransitionApplication.class",
                     "com/itranzition/alex/security/jwt/JwtUser.class",
-                    "com/itranzition/alex/security/jwt/TokenFilter.class",
                     "com/itranzition/alex/security/jwt/JwtUserFactory.class"
             ])
         })

@@ -1,6 +1,5 @@
 package com.itranzition.alex.security.jwt;
 
-import com.itranzition.alex.exception.JwtAuthenticationException;
 import com.itranzition.alex.properties.JwtConfigurationProperties;
 import com.itranzition.alex.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
@@ -67,7 +66,8 @@ public class TokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(keyword).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Jwt token is expired or invalid " + token);
+            return false;
+            //throw new JwtAuthenticationException("Jwt token is expired or invalid " + token);
         }
     }
 

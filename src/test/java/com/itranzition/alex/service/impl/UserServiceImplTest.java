@@ -9,8 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -56,7 +56,19 @@ class UserServiceImplTest {
     @DisplayName("test return true when method throws exception on user absence at db")
     void findUserByEmailWithExceptionThrowing() {
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
-        assertThrows(ResponseStatusException.class, () -> userService.findUserByEmail(USER_EMAIL));
+        assertThrows(BadCredentialsException.class, () -> userService.findUserByEmail(USER_EMAIL));
+    }
+
+    @Test
+    @DisplayName("test return true when method throws exception on null email")
+    void findUserByEmailWithBadCredentialsExceptionThrowingNullEmail() {
+        assertThrows(BadCredentialsException.class, () -> userService.findUserByEmail(null));
+    }
+
+    @Test
+    @DisplayName("test return true when method throws exception on blank email")
+    void findUserByEmailWithBadCredentialsExceptionThrowingBlankEmail() {
+        assertThrows(BadCredentialsException.class, () -> userService.findUserByEmail("  "));
     }
 
     @Test

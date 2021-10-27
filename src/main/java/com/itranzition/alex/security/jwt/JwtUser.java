@@ -1,5 +1,6 @@
 package com.itranzition.alex.security.jwt;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class JwtUser implements UserDetails {
     private final String email;
     private final String password;

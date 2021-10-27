@@ -51,9 +51,26 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("test return true when all application works correctly on /user/hello request and returns expected response")
+    void hello2() throws Exception {
+        String helloEndpoint = "/api/user/hello";
+        String token = createNonValidTestToken();
+        mockMvc.perform(get(helloEndpoint)
+                        .header(TOKEN_HEADER, token)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
     private String createTestToken() {
         String result = new StringBuilder(TOKEN_PREFIX)
                 .append(provider.createToken(TEST_EMAIL, TEST_ROLE)).toString();
+        return result;
+    }
+
+    private String createNonValidTestToken() {
+        String result = new StringBuilder(TOKEN_PREFIX)
+                .append("provider.createToken(TEST_EMAIL, TEST_ROLE)").toString();
         return result;
     }
 }

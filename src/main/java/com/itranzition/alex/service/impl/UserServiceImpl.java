@@ -4,12 +4,11 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.repository.UserRepository;
 import com.itranzition.alex.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -31,13 +30,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User findUserByEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new BadCredentialsException(HttpStatus.BAD_REQUEST +
+                    String.format(" email cannot be null or empty"));
+        }
         User result;
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             result = optionalUser.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("User with email %s do not exist", email));
+            throw new BadCredentialsException(HttpStatus.BAD_REQUEST +
+                    String.format(" User with email %s do not exist", email));
         }
         return result;
     }
