@@ -87,12 +87,11 @@ jacocoTestCoverageVerification {
             fileTree(dir: it, exclude: [
                     "com/itranzition/alex/exception/*",
                     "**/model/**",
-                    "com/itranzition/alex/mapper/*",
-                    "com/itranzition/alex/properties/*",
-                    "com/itranzition/alex/config/*",
+                    "**/mapper/**",
+                    "**/properties/**",
+                    "**/config/**",
                     "com/itranzition/alex/ItransitionApplication.class",
-                    "com/itranzition/alex/security/jwt/JwtUser.class",
-                    "com/itranzition/alex/security/jwt/JwtUserFactory.class"
+                    "**/jwt/JwtUser.class",
             ])
         })
     }
