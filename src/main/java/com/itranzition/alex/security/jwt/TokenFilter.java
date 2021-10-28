@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-
 @RequiredArgsConstructor
 public class TokenFilter extends GenericFilterBean {
     private final TokenProvider provider;

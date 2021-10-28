@@ -85,12 +85,12 @@ jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    "com/itranzition/alex/exception/*",
+                    "**/exception/**",
                     "**/model/**",
                     "**/mapper/**",
                     "**/properties/**",
                     "**/config/**",
-                    "com/itranzition/alex/ItransitionApplication.class",
+                    "**/ItransitionApplication.class",
                     "**/jwt/JwtUser.class",
             ])
         })
