@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
 
+    private JwtUserFactory(){}
+
     public static JwtUser create(User user) {
         List<String> userRoleList = new ArrayList<>();
         userRoleList.add(user.getRole());
