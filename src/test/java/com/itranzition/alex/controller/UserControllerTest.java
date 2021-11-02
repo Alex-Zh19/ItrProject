@@ -60,14 +60,12 @@ class UserControllerTest extends ItransitionApplicationTests {
     }
 
     private String createTestToken() {
-        String result = new StringBuilder(TOKEN_PREFIX)
+        return new StringBuilder(TOKEN_PREFIX)
                 .append(provider.createToken(TEST_EMAIL, TEST_ROLE)).toString();
-        return result;
     }
 
     private String createNonValidTestToken() {
-        String result = new StringBuilder(TOKEN_PREFIX)
+        return new StringBuilder(TOKEN_PREFIX)
                 .append("provider.createToken(TEST_EMAIL, TEST_ROLE)").toString();
-        return result;
     }
 }
