@@ -23,7 +23,6 @@ services:
       - 8080:8080
     depends_on:
       - db
-      - rabbit
       - rabbit-consumer
   db:
     container_name: itr-app-postgres
@@ -55,7 +54,18 @@ services:
       - RABBIT_PORT=5672
       - RABBIT_HOST=rabbit
       - RABBIT_QUEUE=${RABBIT_QUEUE}
-
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - rabbit
+      - redis
+  redis:
+    container_name: redis-itr-app
+    image: redis:6.2.6-alpine
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "127.0.0.1:6379:6379"
 volumes:
   dbstore:
   rabbitmq_log:
