@@ -23,7 +23,6 @@ services:
       - 8080:8080
     depends_on:
       - db
-      - rabbit
       - rabbit-consumer
   db:
     container_name: itr-app-postgres
@@ -47,15 +46,26 @@ services:
   rabbit-consumer:
     container_name: rabbit-consumer
     build:
-     context:  /home/alexandr/IdeaProjects/rabbit-consumer/
-     dockerfile: Dockerfile
+      context: /home/alexandr/IdeaProjects/rabbit-consumer/
+      dockerfile: Dockerfile
     environment:
       - RABBIT_PASS=${RABBIT_PASS}
       - RABBIT_USERNAME=${RABBIT_USERNAME}
       - RABBIT_PORT=5672
       - RABBIT_HOST=rabbit
       - RABBIT_QUEUE=${RABBIT_QUEUE}
-
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - rabbit
+      - redis
+  redis:
+    container_name: redis-itr-app
+    image: redis:6.2.6-alpine
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "127.0.0.1:6379:6379"
 volumes:
   dbstore:
   rabbitmq_log:

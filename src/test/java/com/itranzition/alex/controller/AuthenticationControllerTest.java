@@ -1,5 +1,6 @@
 package com.itranzition.alex.controller;
 
+import com.itranzition.alex.ItransitionApplicationTests;
 import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.rabbitmq.Producer;
 import com.itranzition.alex.repository.UserRepository;
@@ -9,26 +10,27 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
-class AuthenticationControllerTest {
+class AuthenticationControllerTest extends ItransitionApplicationTests {
     private static final String TEST_EMAIL = "testUserEmail@mail.ru";
     private static final String TEST_NAME = "testUserName";
     private static final String TEST_PASSWORD = "testUserPassword";
     private static final String TEST_SURNAME = "testUserSurname";
     private static final String TEST_ROLE = "testUserRole";
+    private static final String AUTHENTICATION_JSON =
+            String.format("{\"email\": \"%s\", \"password\": \"%s\"}", TEST_EMAIL, TEST_PASSWORD);
+    private static final String SIGN_UP_JSON =
+            String.format("{\"email\": \"%s\", \"name\": \"%s\", \"password\": \"%s\", \"confirmPassword\": \"%s\", \"surname\": \"%s\"}",
+                    TEST_EMAIL, TEST_NAME, TEST_PASSWORD, TEST_PASSWORD, TEST_SURNAME);
     private static User testUser;
     @Autowired
     private MockMvc mockMvc;
@@ -57,7 +59,7 @@ class AuthenticationControllerTest {
         String signInEndpoint = "/api/auth/signin";
         mockMvc.perform(get(signInEndpoint).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(createAuthenticationJson())).andExpect(status().isOk());
+                .content(AUTHENTICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
@@ -66,30 +68,7 @@ class AuthenticationControllerTest {
         String signUpEndpoint = "/api/auth/signup";
         mockMvc.perform(post(signUpEndpoint).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(createSignUpJson())).andExpect(status().isOk());
-    }
-
-    private String createAuthenticationJson() {
-        String result = new StringBuilder("{\"email\": \"")
-                .append(TEST_EMAIL)
-                .append("\", \"password\": \"")
-                .append(TEST_PASSWORD)
-                .append("\"}").toString();
-        return result;
-    }
-
-    private String createSignUpJson() {
-        String result = new StringBuilder("{\"email\": \"")
-                .append(TEST_EMAIL)
-                .append("\", \"name\": \"")
-                .append(TEST_NAME)
-                .append("\", \"password\": \"")
-                .append(TEST_PASSWORD)
-                .append("\", \"confirmPassword\": \"")
-                .append(TEST_PASSWORD)
-                .append("\", \"surname\": \"")
-                .append(TEST_SURNAME)
-                .append("\"}").toString();
-        return result;
+                .content(SIGN_UP_JSON)).andExpect(status()
+                .isOk());
     }
 }

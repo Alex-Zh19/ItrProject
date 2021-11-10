@@ -71,14 +71,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-test {
     finalizedBy jacocoTestReport
     jacoco {
         destinationFile = file("$buildDir/jacoco/jacoco.exec")
     }
-
 }
 
 jacocoTestReport {
@@ -89,16 +85,13 @@ jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    "com/itranzition/alex/exception/*",
-                    "com/itranzition/alex/model/*",
-                    "com/itranzition/alex/mapper/*",
-                    "com/itranzition/alex/properties/*",
-                    "com/itranzition/alex/config/*",
-                    "com/itranzition/alex/rabbitmq/*",
-                    "com/itranzition/alex/ItransitionApplication.class",
-                    "com/itranzition/alex/security/jwt/JwtUser.class",
-                    "com/itranzition/alex/security/jwt/TokenFilter.class",
-                    "com/itranzition/alex/security/jwt/JwtUserFactory.class"
+                    "**/exception/**",
+                    "**/model/**",
+                    "**/mapper/**",
+                    "**/properties/**",
+                    "**/config/**",
+                    "**/ItransitionApplication.class",
+                    "**/jwt/JwtUser.class",
             ])
         })
     }
