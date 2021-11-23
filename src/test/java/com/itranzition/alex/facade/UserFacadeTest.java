@@ -25,12 +25,12 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserFacadeTest {
-    private final String USER_EMAIL = "testEmail@mail.ru";
-    private final String USER_ROLE = "USER";
-    private final String USER_PASSWORD = "testPassword";
-    private final String USER_NAME = "john";
-    private final String USER_SURNAME = "doe";
-    private final String DEFAULT_MESSAGE = "hello ";
+    private static final String USER_EMAIL = "testEmail@mail.ru";
+    private static final String USER_ROLE = "USER";
+    private static final String USER_PASSWORD = "testPassword";
+    private static final String USER_NAME = "john";
+    private static final String USER_SURNAME = "doe";
+    private static final String DEFAULT_MESSAGE = "hello ";
 
     private UserFacade userFacade = new UserFacade();
     @Mock

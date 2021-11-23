@@ -18,13 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 class UserControllerTest extends ItransitionApplicationTests {
-    private final String TEST_EMAIL = "testEmail";
-    private final String TEST_NAME = "testName";
-    private final String TEST_PASSWORD = "testPass";
-    private final String TEST_SURNAME = "testSurname";
-    private final String TEST_ROLE = "testRole";
-    private final String TOKEN_PREFIX = "Bearer ";
-    private final String TOKEN_HEADER = "Authorization";
+    private static final String TEST_EMAIL = "testEmail";
+    private static final String TEST_NAME = "testName";
+    private static final String TEST_PASSWORD = "testPass";
+    private static final String TEST_SURNAME = "testSurname";
+    private static final String TEST_ROLE = "testRole";
+    private static final String TOKEN_PREFIX = "Bearer ";
+    private static final String TOKEN_HEADER = "Authorization";
     @Autowired
     private MockMvc mockMvc;
     @SpyBean

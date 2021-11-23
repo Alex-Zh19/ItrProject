@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class JwtUserFactoryTest {
-    private final String USER_EMAIL = "testEmail@mail.ru";
-    private final String USER_ROLE = "USER";
-    private final String USER_PASSWORD = "testPassword";
-    private final String USER_NAME = "john";
-    private final String USER_SURNAME = "doe";
+    private static final String USER_EMAIL = "testEmail@mail.ru";
+    private static final String USER_ROLE = "USER";
+    private static final String USER_PASSWORD = "testPassword";
+    private static final String USER_NAME = "john";
+    private static final String USER_SURNAME = "doe";
 
     @Test
     void create() {

@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ProducerTest extends ItransitionApplicationTests {
-    private final String TEST_EMAIL = "testEmail";
-    private final String TEST_NAME = "testName";
+    private static final String TEST_EMAIL = "testEmail";
+    private static final String TEST_NAME = "testName";
 
     @Autowired
     private Producer producer;

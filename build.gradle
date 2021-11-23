@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'jacoco'
+    id 'checkstyle'
 }
 
 group = 'com.itranzition.alex'
@@ -110,4 +111,20 @@ jacocoTestCoverageVerification {
             }
         }
     }
+}
+
+
+checkstyle {
+    toolVersion '9.1'
+    reportsDir = file("$buildDir/reports/checkstyle")
+}
+
+checkstyleMain {
+    source = "src/main/java"
+    configFile = file( "$projectDir/src/main/resources/checkstyle/checkstyle.xml")
+}
+
+checkstyleTest {
+    source = "src/test/java"
+    configFile = file( "$projectDir/src/test/resources/checkstyle/checkstyle-test.xml")
 }

@@ -10,10 +10,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", source = "signUpDto.email")
     @Mapping(target = "name", source = "signUpDto.name")
     @Mapping(target = "password", source = "signUpDto.password")
     @Mapping(target = "surname", source = "signUpDto.surname", defaultValue = "NULL")
+    @Mapping(target = "role", ignore = true)
     User signUpDtoToUser(SignUpDto signUpDto);
 
     @Mapping(target = "email", source = "signUpDto.email")
