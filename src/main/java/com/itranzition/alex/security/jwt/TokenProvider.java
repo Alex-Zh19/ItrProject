@@ -66,7 +66,7 @@ public class TokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(keyword).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            return false; //parseClaimsJws throws ExpiredJwsException when token is expired
+            return false; //parseClaimsJws throws ExpiredJwtException when token is expired
         }
     }
 
