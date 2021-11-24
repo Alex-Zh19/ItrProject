@@ -1,7 +1,11 @@
 package com.itranzition.alex.facade;
 
 import com.itranzition.alex.mapper.UserMapper;
-import com.itranzition.alex.model.dto.*;
+import com.itranzition.alex.model.dto.BaseResponseDto;
+import com.itranzition.alex.model.dto.AuthenticationDto;
+import com.itranzition.alex.model.dto.SignUpDto;
+import com.itranzition.alex.model.dto.RabbitConsumerMessageDto;
+import com.itranzition.alex.model.dto.RegisteredUserDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignInDto;
 import com.itranzition.alex.model.dto.impl.ResponseSignUpDto;
 import com.itranzition.alex.model.entity.User;
@@ -47,8 +51,8 @@ public class AuthenticationFacade {
         if (!signUpDto.getPassword().equals(signUpDto.getConfirmPassword())) {
             throw new BadCredentialsException("User password and confirm password do not march");
         }
-        if (signUpDto.getEmail() == null || signUpDto.getPassword() == null ||
-                signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
+        if (signUpDto.getEmail() == null || signUpDto.getPassword() == null
+                || signUpDto.getConfirmPassword() == null || signUpDto.getName() == null) {
             throw new BadCredentialsException("Fill in required fields");
         }
         if (userService.existsByEmail(signUpDto.getEmail())) {

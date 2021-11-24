@@ -9,7 +9,7 @@ import java.security.Principal;
 
 @Component
 public class UserFacade {
-    private final String DEFAULT_MESSAGE = "hello ";
+    private static final String DEFAULT_MESSAGE = "hello ";
 
     public BaseResponseDto hello() {
         Principal principal = SecurityContextHolder.getContext().getAuthentication();

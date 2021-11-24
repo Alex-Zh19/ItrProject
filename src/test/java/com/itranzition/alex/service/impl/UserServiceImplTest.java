@@ -14,18 +14,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
-    private final String USER_EMAIL = "testEmail@mail.ru";
-    private final String USER_ROLE = "USER";
-    private final String USER_PASSWORD = "testPassword";
-    private final String USER_NAME = "john";
-    private final String USER_SURNAME = "doe";
+    private static final String USER_EMAIL = "testEmail@mail.ru";
+    private static final String USER_ROLE = "USER";
+    private static final String USER_PASSWORD = "testPassword";
+    private static final String USER_NAME = "john";
+    private static final String USER_SURNAME = "doe";
 
     @Mock
     private UserRepository userRepository;

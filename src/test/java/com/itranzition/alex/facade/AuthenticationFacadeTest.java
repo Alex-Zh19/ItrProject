@@ -22,19 +22,21 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationFacadeTest {
-    private final String USER_EMAIL = "testEmail@mail.ru";
-    private final String USER_ROLE = "USER";
-    private final String USER_PASSWORD = "testPassword";
-    private final String USER_NAME = "john";
-    private final String USER_SURNAME = "doe";
-    private final String TEST_TOKEN = "token";
+    private static final String USER_EMAIL = "testEmail@mail.ru";
+    private static final String USER_ROLE = "USER";
+    private static final String USER_PASSWORD = "testPassword";
+    private static final String USER_NAME = "john";
+    private static final String USER_SURNAME = "doe";
+    private static final String TEST_TOKEN = "token";
 
     @Mock
     private AuthenticationManager authenticationManager;
@@ -73,8 +75,8 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    @DisplayName("test should return true when method throws BadCredentialsException " +
-            "on empty email or password field at authenticationDto")
+    @DisplayName("test should return true when method throws BadCredentialsException "
+            + "on empty email or password field at authenticationDto")
     void signInThrowsBadCredentials() {
         AuthenticationDto authenticationDto = new AuthenticationDto();
         authenticationDto.setPassword(USER_PASSWORD);
@@ -82,8 +84,8 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    @DisplayName("test should return true when method throws BadCredentialsException " +
-            "on empty email or password field at authenticationDto")
+    @DisplayName("test should return true when method throws BadCredentialsException "
+            + "on empty email or password field at authenticationDto")
     void signInThrowsBadCredentials2() {
         AuthenticationDto authenticationDto = new AuthenticationDto();
         authenticationDto.setEmail(USER_EMAIL);
@@ -109,8 +111,8 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    @DisplayName("test should return true when method throws badCredentialsException due to password and " +
-            "confirm password don't match")
+    @DisplayName("test should return true when method throws badCredentialsException due to password and "
+            + "confirm password don't match")
     void signUpThrowsBadCredentials() {
         SignUpDto dtoFromController = new SignUpDto();
         dtoFromController.setEmail(USER_EMAIL);
@@ -121,8 +123,8 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    @DisplayName("test should return true when method throws badCredentialsException due to " +
-            "user with such email already exist")
+    @DisplayName("test should return true when method throws badCredentialsException due to "
+            + "user with such email already exist")
     void signUpThrowsBadCredentialsOnExistByEmail() {
         when(userService.existsByEmail(anyString())).thenReturn(true);
         SignUpDto dtoFromController = createSignUpDto();
@@ -130,8 +132,8 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    @DisplayName("test should return true when method throws badCredentialsException due to " +
-            "blank required fields")
+    @DisplayName("test should return true when method throws badCredentialsException due to "
+            + "blank required fields")
     void signUpThrowsBadCredentialsFillRequiredFields() {
         SignUpDto dtoFromController = new SignUpDto();
         dtoFromController.setPassword(USER_PASSWORD);
@@ -141,8 +143,8 @@ class AuthenticationFacadeTest {
     }
 
     @Test
-    @DisplayName("test should return true when method throws badCredentialsException due to " +
-            "blank required fields")
+    @DisplayName("test should return true when method throws badCredentialsException due to "
+            + "blank required fields")
     void signUpThrowsBadCredentialsFillRequiredFields2() {
         SignUpDto dtoFromController = new SignUpDto();
         dtoFromController.setEmail(USER_EMAIL);

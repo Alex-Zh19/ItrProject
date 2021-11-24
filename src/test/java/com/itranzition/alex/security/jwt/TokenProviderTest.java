@@ -13,17 +13,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @EnableConfigurationProperties(JwtConfigurationProperties.class)
 class TokenProviderTest {
-    private final String TEST_EMAIL = "testEmail@mail.ru";
-    private final String TEST_ROLE = "USER";
-    private final long DEFAULT_EXPIRATION = 20;
-    private final String TOKEN_PREFIX = "Bearer ";
+    private static final String TEST_EMAIL = "testEmail@mail.ru";
+    private static final String TEST_ROLE = "USER";
+    private static final long DEFAULT_EXPIRATION = 20;
+    private static final String TOKEN_PREFIX = "Bearer ";
     private TokenProvider tokenProvider;
     @Mock
     private JwtConfigurationProperties properties;

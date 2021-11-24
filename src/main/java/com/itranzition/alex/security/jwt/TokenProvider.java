@@ -2,7 +2,12 @@ package com.itranzition.alex.security.jwt;
 
 import com.itranzition.alex.properties.JwtConfigurationProperties;
 import com.itranzition.alex.security.JwtUserDetailsService;
-import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +26,7 @@ import java.util.Date;
 public class TokenProvider {
     private static final String PREFIX = "Bearer ";
     private static final String HEADER = "Authorization";
+    private static final int COUNT_OF_MILLISECONDS_IN_SECOND = 1000;
     private String keyword;
     private long validityMilliseconds;
 
@@ -44,7 +50,7 @@ public class TokenProvider {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityMilliseconds * 1000);
+        Date validity = new Date(now.getTime() + validityMilliseconds * COUNT_OF_MILLISECONDS_IN_SECOND);
         return Jwts.builder().
                 setClaims(claims).
                 setIssuedAt(now).
@@ -66,7 +72,7 @@ public class TokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(keyword).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            return false; //parseClaimsJws throws ExpiredJwsException when token is expired
+            return false; //parseClaimsJws throws ExpiredJwtException when token is expired
         }
     }
 

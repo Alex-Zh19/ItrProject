@@ -31,16 +31,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findUserByEmail(String email) {
         if (email == null || email.isBlank()) {
-            throw new BadCredentialsException(HttpStatus.BAD_REQUEST +
-                    String.format(" email cannot be null or empty"));
+            throw new BadCredentialsException(HttpStatus.BAD_REQUEST + " email cannot be null or empty");
         }
         User result;
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             result = optionalUser.get();
         } else {
-            throw new BadCredentialsException(HttpStatus.BAD_REQUEST +
-                    String.format(" User with email %s do not exist", email));
+            throw new BadCredentialsException(HttpStatus.BAD_REQUEST
+                    + String.format(" User with email %s do not exist", email));
         }
         return result;
     }
