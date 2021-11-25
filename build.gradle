@@ -114,7 +114,6 @@ jacocoTestCoverageVerification {
     }
 }
 
-
 checkstyle {
     toolVersion '9.1'
     reportsDir = file("$buildDir/reports/checkstyle")
