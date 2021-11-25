@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'checkstyle'
+    id 'com.google.cloud.tools.jib' version '3.1.1'
 }
 
 group = 'com.itranzition.alex'
@@ -121,10 +122,22 @@ checkstyle {
 
 checkstyleMain {
     source = "src/main/java"
-    configFile = file( "$projectDir/src/main/resources/checkstyle/checkstyle.xml")
+    configFile = file("$projectDir/src/main/resources/checkstyle/checkstyle.xml")
 }
 
 checkstyleTest {
     source = "src/test/java"
-    configFile = file( "$projectDir/src/test/resources/checkstyle/checkstyle-test.xml")
+    configFile = file("$projectDir/src/test/resources/checkstyle/checkstyle-test.xml")
+}
+
+tasks.build.dependsOn tasks.jibDockerBuild
+
+jib {
+    from {
+        image "azul/zulu-openjdk:17-jre"
+    }
+}
+
+jibDockerBuild {
+    targetImage("itr-app-image")
 }
