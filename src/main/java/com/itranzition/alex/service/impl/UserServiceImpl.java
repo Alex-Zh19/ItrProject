@@ -4,7 +4,6 @@ import com.itranzition.alex.model.entity.User;
 import com.itranzition.alex.repository.UserRepository;
 import com.itranzition.alex.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.OptimisticLock;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,11 +36,8 @@ public class UserServiceImpl implements UserService {
         if (email == null || email.isBlank()) {
             throw new BadCredentialsException(HttpStatus.BAD_REQUEST + " email cannot be null or empty");
         }
-        if (!existsByEmail(email)) {
-            throw new BadCredentialsException(HttpStatus.BAD_REQUEST +
-                    String.format(" User with email %s do not exist", email));
-        }
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElseThrow(()->new BadCredentialsException(HttpStatus.BAD_REQUEST
+                + String.format(" User with email %s do not exist", email)));
     }
 
     @Override

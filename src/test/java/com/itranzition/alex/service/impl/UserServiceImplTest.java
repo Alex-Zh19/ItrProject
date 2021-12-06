@@ -49,8 +49,7 @@ class UserServiceImplTest {
     @DisplayName("test return true when user was found at database correctly")
     void findUserByEmail() {
         User expectedUser = new User((long) 1, USER_EMAIL, USER_NAME, USER_PASSWORD, USER_SURNAME, USER_ROLE);
-        when(userRepository.existsByEmail(any(String.class))).thenReturn(true);
-        when(userRepository.findByEmail(any(String.class))).thenReturn(expectedUser);
+        when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.of(expectedUser));
         User actualUser = userService.findUserByEmail(USER_EMAIL);
         assertEquals(expectedUser, actualUser);
     }
@@ -58,7 +57,7 @@ class UserServiceImplTest {
     @Test
     @DisplayName("test return true when method throws exception on user absence at db")
     void findUserByEmailWithExceptionThrowing() {
-        when(userRepository.existsByEmail(any(String.class))).thenReturn(false);
+        when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
         assertThrows(BadCredentialsException.class, () -> userService.findUserByEmail(USER_EMAIL));
     }
 
