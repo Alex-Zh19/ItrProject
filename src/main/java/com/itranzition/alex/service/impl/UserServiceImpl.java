@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         if (email == null || email.isBlank()) {
             throw new BadCredentialsException(HttpStatus.BAD_REQUEST + " email cannot be null or empty");
         }
-        return userRepository.findByEmail(email).orElseThrow(()->new BadCredentialsException(HttpStatus.BAD_REQUEST
+        return userRepository.findByEmail(email).orElseThrow(() -> new BadCredentialsException(HttpStatus.BAD_REQUEST
                 + String.format(" User with email %s do not exist", email)));
     }
 
