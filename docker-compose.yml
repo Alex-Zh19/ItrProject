@@ -3,9 +3,7 @@ version: "3.7"
 services:
   itr-app:
     container_name: itr-app
-    build:
-      context: /home/alexandr/IdeaProjects/ItrProject/
-      dockerfile: Dockerfile
+    image: itr-app-image
     environment:
       - DB_URL=${DB_URL}
       - DB_USERNAME=${DB_USERNAME}
